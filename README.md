@@ -1,5 +1,5 @@
 ## Group Members
-- Member 1:  
+- Member 1: Nasrun Asri Bin Muhammad (2210479)
 - Member 2: 
 - Member 3: Muhd Iskandar Bin Yong Fui Min (2214527)
 - Member 4: 
