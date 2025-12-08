@@ -1,6 +1,6 @@
 ## Group Members
 - Member 1: Nasrun Asri Bin Muhammad (2210479)
-- Member 2: 
+- Member 2: Sofwan Bin Aliza (2224483)
 - Member 3: Muhd Iskandar Bin Yong Fui Min (2214527)
 - Member 4: 
 - Member 5: Esma Dennis Bin Mohd Adam (2316821)
