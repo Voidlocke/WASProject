@@ -64,8 +64,7 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
-
-//booking part
+    //booking part
     public function bookings()
     {
     return $this->hasMany(Booking::class);
@@ -76,5 +75,3 @@ class User extends Authenticatable
     return $this->hasMany(Review::class, 'id');
     }
 }
-
-// relationship for seeder

@@ -101,3 +101,5 @@ Route::get('payment', [PaymentController::class, 'index'])->name('payment');
 
 Route::get('/reviews/{review}/edit', [ReviewController::class, 'edit'])->name('reviews.edit');
 Route::put('/reviews/{review}', [ReviewController::class, 'update'])->name('reviews.update');
+
+
