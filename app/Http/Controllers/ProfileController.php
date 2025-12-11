@@ -62,6 +62,10 @@ public function updateProfilePhoto(Request $request)
 public function cancelBooking(Request $request, $booking_id)
     {
         $bookings = Booking::findOrFail($booking_id);
+
+        // Authorization check - verify user can delete this booking
+        $this->authorize('delete', $bookings);
+
         $bookings->delete();
 
         return redirect()->route('profile.show')->with('success', 'Your booking has been canceled successfully.');

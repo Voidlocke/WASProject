@@ -32,9 +32,20 @@ Route::get('/contact', function () {
     return view('contact');
 });
 
-Route::get('/admin', function () {
-    return view('admin');
-})->name('admin');
+// Admin login routes (public - with rate limiting for security)
+Route::get('/admin/login', [AdminLoginController::class, 'showLoginForm'])->name('admin.login');
+Route::post('/admin/login', [AdminLoginController::class, 'login'])
+    ->middleware('throttle:5,1')  // 5 attempts per minute
+    ->name('admin.login.submit');
+
+// Debug route - remove after testing
+Route::get('/admin/check', function() {
+    return [
+        'is_authenticated' => auth()->guard('admin')->check(),
+        'user' => auth()->guard('admin')->user(),
+        'id' => auth()->guard('admin')->id(),
+    ];
+});
 
 Route::get('/reviews', [ReviewController::class, 'index'])->name('reviews.index');
 Route::post('/reviews', [ReviewController::class, 'store'])->name('reviews.store');
@@ -63,9 +74,6 @@ Route::middleware([
 
 Route::get('/reviews', [ReviewController::class, 'index'])->name('reviews.index');
 
-Route::get('/admin/login', [AdminLoginController::class, 'showLoginForm'])->name('admin.login');
-Route::post('/admin/login', [AdminLoginController::class, 'login'])->name('admin.login.submit');
-
 Route::post('/payment', [PaymentController::class, 'index'])->name('payment');
 Route::post('/payment/process', [PaymentController::class, 'processPayment'])->name('payment.process');
 Route::post('/payment/{booking_id}', [PaymentController::class, 'processSuccess'])->name('payment.submit');
@@ -79,18 +87,23 @@ Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show')
 Route::put('/profile/photo', [ProfileController::class, 'updateProfilePhoto'])->name('profile.updatePhoto');
 Route::delete('/cancel-booking/{booking_id}', [ProfileController::class, 'cancelBooking'])->name('profile.cancelBooking');
 
-// admin details
-Route::get('/admin', [AdminController::class, 'index'])->name('admin.index');
-Route::post('/admin', [AdminController::class, 'admindetail']);
+// Admin routes - Protected with isAdmin middleware
+Route::middleware(['isAdmin'])->prefix('admin')->group(function () {
+    // Admin dashboard
+    Route::get('/', [BookingController::class, 'index'])->name('admin.index');
 
+    // Admin logout
+    Route::post('/logout', [AdminLoginController::class, 'logout'])->name('admin.logout');
 
-//admin page get data part
-Route::get('/admin', [BookingController::class, 'index'])->name('admin.index');
-Route::post('/admin/bookings', [PaymentController::class, 'index'])->name('bookings.index');
-Route::post('/adminbookings', [BookingController::class, 'adminStore'])->name('bookings.adminstore');
-Route::get('/adminbookings/{booking_id}/edit', [BookingController::class, 'edit'])->name('bookings.edit');
-Route::put('/adminbookings/{booking_id}', [BookingController::class, 'update'])->name('bookings.update');
-Route::delete('/adminbookings/{booking_id}', [BookingController::class, 'destroy'])->name('bookings.destroy');
+    // Admin management
+    Route::post('/details', [AdminController::class, 'admindetail'])->name('admin.details');
+
+    // Admin booking management
+    Route::post('/bookings/store', [BookingController::class, 'adminStore'])->name('bookings.adminstore');
+    Route::get('/bookings/{booking_id}/edit', [BookingController::class, 'edit'])->name('bookings.edit');
+    Route::put('/bookings/{booking_id}', [BookingController::class, 'update'])->name('bookings.update');
+    Route::delete('/bookings/{booking_id}', [BookingController::class, 'destroy'])->name('bookings.destroy');
+});
 
 //get room data from database for rooms page
 //Route::get('/rooms', [BookingController::class, 'rooms'])->name('rooms');

@@ -22,6 +22,22 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/raty/2.7.1/jquery.raty.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
+    <style>
+        /* Make navigation links fully clickable */
+        .user_box_link {
+            display: inline-block;
+        }
+        .user_box_link a {
+            display: block;
+            padding: 10px 20px;
+            text-decoration: none;
+            transition: background-color 0.2s;
+        }
+        .user_box_link a:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+    </style>
+
 </head>
   <body>
     <!--Top BE-->
@@ -42,7 +58,23 @@
 
                     <!-- User Box (Login/Register) on the Right -->
                     <div class="user_box d-flex ml-auto"> <!-- Ensure user_box is treated as flex and aligned to the right -->
-                        @if (Auth::check())
+                        @if (Auth::guard('admin')->check() || session('admin_authenticated'))
+                        <!-- Admin is logged in -->
+                        <div class="user_box_profile user_box_link">
+                            <a href="{{ route('admin.index') }}">Admin Dashboard</a>
+                        </div>
+                        <div class="spacer"></div>
+                        <div class="user_box_link">
+                            <a href="#" onclick="event.preventDefault(); document.getElementById('admin-logout-form').submit();">Logout</a>
+                        </div>
+
+                        <!-- Hidden Form for Admin Logout -->
+                        <form id="admin-logout-form" method="POST" action="{{ route('admin.logout') }}" style="display: none;">
+                            @csrf
+                        </form>
+
+                        @elseif (Auth::check())
+                        <!-- Regular user is logged in -->
                         <div class="user_box_profile user_box_link">
                             <a href="{{ route('profile.show') }}">Profile</a>
                         </div>
@@ -51,14 +83,19 @@
                             <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
                         </div>
 
-                        <!-- Hidden Form for Logout -->
+                        <!-- Hidden Form for User Logout -->
                         <form id="logout-form" method="POST" action="{{ route('logout') }}" style="display: none;">
                             @csrf
                         </form>
 
                         @else
-                            <div class="user_box_login user_box_link"><a href="{{ route('login') }}">Sign In</a></div>
-                            <div class="user_box_register user_box_link"><a href="{{ route('register') }}">Register</a></div>
+                        <!-- Not logged in -->
+                            <div class="user_box_login user_box_link">
+                                <a href="{{ route('login') }}">Sign In</a>
+                            </div>
+                            <div class="user_box_register user_box_link">
+                                <a href="{{ route('register') }}">Register</a>
+                            </div>
                         @endif
                         <div class="user_box_link">
                             <a href="/rooms" class="btn btn-primary book-now-btn">Book Now</a>

@@ -34,6 +34,9 @@ class ReviewController extends Controller
 
     public function store(Request $request)
     {
+        // Authorization check - verify user can create reviews
+        $this->authorize('create', Review::class);
+
         $request->validate([
             'review_text' => 'required|string|max:255',
             'rating' => 'required|numeric|min:0|max:5',
@@ -74,15 +77,24 @@ class ReviewController extends Controller
     public function edit($id)
     {
         $review = Review::findOrFail($id);
+
+        // Authorization check - verify user can update this review
+        $this->authorize('update', $review);
+
         return view('edit_review', compact('review'));
     }
+
     public function update(Request $request, $id)
     {
+        $review = Review::findOrFail($id);
+
+        // Authorization check - verify user can update this review
+        $this->authorize('update', $review);
+
         $request->validate([
             'review_text' => 'required|string|max:255',
         ]);
 
-        $review = Review::findOrFail($id);
         $review->review_text = $request->input('review_text');
         $review->save();
 
@@ -93,6 +105,10 @@ class ReviewController extends Controller
     public function destroy($id)
     {
         $review = Review::findOrFail($id);
+
+        // Authorization check - verify user can delete this review
+        $this->authorize('delete', $review);
+
         if ($review->property_photos) {
             Storage::delete($review->property_photos);
         }

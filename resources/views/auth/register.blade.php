@@ -4,6 +4,12 @@
             <img src="{{ asset('images/logo.png') }}" alt="Application Logo" class="h-10 w-auto">
         </x-slot>
 
+        <div class="mb-4">
+            <a href="{{ route('mainpage') }}" class="text-sm text-gray-600 hover:text-gray-900 underline">
+                ← Back to Home
+            </a>
+        </div>
+
         <div class="text-center mb-6">
             <h2 class="text-2xl font-bold text-black">{{ __('SIGN UP') }}</h2>
         </div>

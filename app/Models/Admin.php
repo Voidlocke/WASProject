@@ -24,7 +24,7 @@ class Admin extends Authenticatable
     ];
 
     protected $hidden = [
-        'admin_pass', 'remember_token',
+        'admin_pass',
     ];
 
     public function index()
@@ -41,7 +41,12 @@ class Admin extends Authenticatable
 
     public function getAuthIdentifierName()
     {
-        return 'admin_email'; // Column name used for identification
+        return 'admin_email'; // Column name used for identification (login)
+    }
+
+    public function getAuthIdentifier()
+    {
+        return $this->admin_id; // Return the ID (integer) for session storage
     }
 
     public function getAuthPassword()

@@ -49,8 +49,10 @@ class BookingController extends Controller
 
 public function store(Request $request)
 {
-    // Retrieve the authenticated user's ID
+    // Authorization check - verify user can create bookings
+    $this->authorize('create', Booking::class);
 
+    // Retrieve the authenticated user's ID
     $userId = Auth::id();
 
     if (!$userId) {
