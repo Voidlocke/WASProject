@@ -67,6 +67,18 @@
     <br>
     <div class="review-form">
         <h3>Enter Payment Details</h3>
+
+        {{-- Show all validation errors at the top --}}
+    @if ($errors->any())
+        <div class="alert alert-danger" style="margin-bottom: 15px;">
+            <ul style="margin: 0; padding-left: 20px;">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+
         <form action="{{ route('payment.submit', ['booking_id' => $data['booking_id']]) }}" method="POST">
             @csrf
 
@@ -90,12 +102,12 @@
 
             <div class="form-group">
                 <label for="expiry_date">Expiry Date</label>
-                <input type="text" name="expiry_date" id="expiry_date" required class="form-control">
+                <input type="text" name="expiry_date" id="expiry_date" placeholder="MM/YY" required class="form-control">
             </div>
 
             <div class="form-group">
                 <label for="cvv">CVV</label>
-                <input type="number" name="ccv" id="ccv" placeholder="Enter CVV" required class="form-control">
+                <input type="number" name="ccv" id="ccv" required class="form-control">
             </div>
 
             <button type="submit" class="btn-post">Make Payment</button>

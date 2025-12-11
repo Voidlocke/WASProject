@@ -14,10 +14,24 @@ class RegisterController extends Controller
     {
         // Validate the registration data
         $validator = Validator::make($request->all(), [
-            'name' => 'required|string|max:255',
+            'name' => 'required|string|max:50',
             'email' => 'required|string|email|max:255|unique:users', // Email should be unique
-            'password' => 'required|string|min:8|confirmed', // Ensures password matches password_confirmation
-        ]);
+            'password' => [
+                'required',
+                'string',
+                'min:8',
+                'confirmed',
+                // at least 1 letter and 1 digit
+                'regex:/^(?=.*[A-Za-z])(?=.*\d).{8,}$/',
+            ],
+        ],
+        [
+            // Custom message for your regex rule:
+            'password.regex' => 'Password must be at least 8 characters and contain letters and numbers.',
+            // (optional) Override default min message too:
+            'password.min'   => 'Password must be at least 8 characters and contain letters and numbers.',
+        ]
+            );
 
         // Check if validation fails
         if ($validator->fails()) {

@@ -31,10 +31,11 @@ class PaymentController extends Controller
     {
         $request->validate([
             'amount' => 'required|numeric',
-            'card_name' => 'required|string',
+            'card_name' => 'required|string|max:50',
             'card_number' => 'required|numeric',
-            'expiry_date' => 'required|string',
-            'ccv' => 'required|numeric',
+            // MM/YY format
+            'expiry_date' => ['required', 'regex:/^(0[1-9]|1[0-2])\/\d{2}$/'],
+            'ccv' => 'required|digits:3',
         ]);
 
         // Fetch the booking from the database
