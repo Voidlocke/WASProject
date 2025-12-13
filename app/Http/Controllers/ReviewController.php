@@ -8,9 +8,12 @@ use App\Models\Room;
 use App\Models\Booking;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class ReviewController extends Controller
 {
+    use AuthorizesRequests;
+
     public function index()
     {
         // Fetch all reviews
