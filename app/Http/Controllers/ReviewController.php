@@ -14,7 +14,6 @@ use Illuminate\Support\Str;
 class ReviewController extends Controller
 {
     use AuthorizesRequests;
-
     public function index()
     {
         $reviews = Review::with(['booking.room'])->get();
