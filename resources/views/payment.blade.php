@@ -87,7 +87,7 @@
                 <p><strong>Total:</strong> MYR {{ ($data['price'] * \Carbon\Carbon::parse($data['check_in_date'])->diffInDays(\Carbon\Carbon::parse($data['check_out_date'])) )+ ($data['price'] * 0.06) }}</p>
             </div>
 
-            <input type="hidden" name="amount" value="{{ number_format(($data['price'] * \Carbon\Carbon::parse($data['check_in_date'])->diffInDays(\Carbon\Carbon::parse($data['check_out_date']))) + ($data['price'] * 0.06), 2, '.', '') }}">
+
 
 
             <div class="form-group">

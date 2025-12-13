@@ -13,9 +13,6 @@ class Payment extends Model
         'booking_id',
         'amount',
         'card_name',
-        'card_number',
-        'expiry_date',
-        'ccv',
         'payment_status',
     ];
 

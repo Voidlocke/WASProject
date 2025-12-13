@@ -30,7 +30,6 @@ class PaymentController extends Controller
     public function processSuccess(Request $request, $booking_id)
     {
         $request->validate([
-            'amount' => 'required|numeric',
             'card_name' => 'required|string|max:50',
             'card_number' => 'required|numeric',
             // MM/YY format
@@ -39,15 +38,26 @@ class PaymentController extends Controller
         ]);
 
         // Fetch the booking from the database
-        $booking = Booking::findOrFail($booking_id);
+        $booking = Booking::where('booking_id', $booking_id)
+        ->where('user_id', auth()->id())
+        ->firstOrFail();
+
+        // Prevent replay / double payment
+        if ($booking->booking_status === 'confirmed') {
+            abort(403, 'Payment already completed');
+        }
+
+        $nights = $booking->check_in_date->diffInDays($booking->check_out_date);
+
+        // Calculate Payment
+        $roomPrice = $booking->room->prices;
+        $subtotal = $roomPrice * $nights;
+        $tax = $subtotal * 0.06;
+        $total = round($subtotal + $tax, 2);
 
         Payment::create([
             'booking_id' => $booking_id,
-            'amount' => (double) $request->amount,
-            'card_name' => $request->card_name,
-            'card_number' => $request->card_number,
-            'expiry_date' => $request->expiry_date,
-            'ccv' => $request->ccv,
+            'amount' => round($total, 2),
             'payment_status' => 'success',
         ]);
 

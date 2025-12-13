@@ -12,6 +12,7 @@ class Booking extends Model
     public $incrementing = false;
     protected $keyType = 'string';
     protected $fillable = ['user_id', 'room_id', 'check_in_date', 'check_out_date', 'guest_count' , 'booking_status', 'guest_count','booking_status',];
+    protected $casts = ['check_in_date' => 'date','check_out_date' => 'date',];
 
     protected static function boot()
     {

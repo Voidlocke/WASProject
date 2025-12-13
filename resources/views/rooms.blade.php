@@ -15,6 +15,14 @@
       </div>
     </div>
 
+    @if (session('error'))
+        <div class="container mt-3">
+            <div class="alert alert-danger text-center">
+                {{ session('error') }}
+            </div>
+        </div>
+    @endif
+
     @php
     $roomImages = [
         'Suite Room' => '/images/room-1.jpg',
@@ -51,7 +59,7 @@
                                             <li><span>Size:</span> 45 m2</li>
                                             <li><span>Bed:</span> {{ $room->bed }}</li>
                                             <li><span>View:</span> Sea View</li>
-                                            <li><span>Availability:</span> {{ $room->availability ? 'Available' : 'Unavailable' }}</li>
+                                            <li><span>Availability:</span> {{ $room->availability }} rooms left</li>
 
                                         </ul>
                                         <hr>
@@ -59,12 +67,12 @@
                                         <form action="{{ route('bookings.store') }}" method="POST" class="add-to-cart-form">
                                             @csrf
                                             <input type="hidden" name="room_id" value="{{ $room->room_id }}">
-                                            <input type="hidden" name="room_type" value="{{ $room->type }}">
-                                            <input type="hidden" name="check_in_date" value="{{ session('checkin_date') }}">
-                                            <input type="hidden" name="check_out_date" value="{{ session('checkout_date') }}">
-                                            <input type="hidden" name="price" value="{{ $room->prices }}">
-                                            <input type="hidden" name="guest_count" value="{{ session('cus_count') }}">
+
+                                            @if ($room->availability > 0)
                                             <button type="submit" class="btn btn-primary">Book Now</button>
+                                        @else
+                                            <button type="button" class="btn btn-secondary" disabled>Fully Booked</button>
+                                        @endif
                                         </form>
                                     </div>
                                 </div>

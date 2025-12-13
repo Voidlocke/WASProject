@@ -99,7 +99,7 @@
                         {{ $review->review_text }}
 
                     </div>
-                    <p>{{ $review->room_type }} <br> {{ $review->check_in }}</p>
+                    <p>{{ $review->booking->room->type }} <br> {{ $review->booking->check_in_date }}</p>
                 </div>
                 <div class="review-meta">
                     <div class="stars">

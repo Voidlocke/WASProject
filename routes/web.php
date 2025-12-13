@@ -12,7 +12,9 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RoomController;
 
 
-Route::resource('reviews', ReviewController::class);
+Route::middleware(['auth'])->group(function () {
+    Route::resource('reviews', ReviewController::class)->except(['index']);
+});
 Route::resource('bookings', BookingController::class);
 
 Route::get('/', function () {
@@ -20,10 +22,6 @@ Route::get('/', function () {
 })->name('mainpage');
 
 Route::get('/home', [HomeController::class, 'index'])->name('home');
-
-Route::get('/reviews', function () {
-    return view('reviews');
-});
 
 Route::get('/rooms', function () {
     return view('rooms');
@@ -48,7 +46,19 @@ Route::get('/admin/check', function() {
 });
 
 Route::get('/reviews', [ReviewController::class, 'index'])->name('reviews.index');
-Route::post('/reviews', [ReviewController::class, 'store'])->name('reviews.store');
+Route::middleware(['auth'])->group(function () {
+    Route::post('/reviews', [ReviewController::class, 'store'])
+        ->name('reviews.store');
+
+    Route::get('/reviews/{review}/edit', [ReviewController::class, 'edit'])
+        ->name('reviews.edit');
+
+    Route::put('/reviews/{review}', [ReviewController::class, 'update'])
+        ->name('reviews.update');
+
+    Route::delete('/reviews/{review}', [ReviewController::class, 'destroy'])
+        ->name('reviews.destroy');
+});
 
 
 
@@ -74,10 +84,11 @@ Route::middleware([
 
 Route::get('/reviews', [ReviewController::class, 'index'])->name('reviews.index');
 
-Route::post('/payment', [PaymentController::class, 'index'])->name('payment');
-Route::post('/payment/process', [PaymentController::class, 'processPayment'])->name('payment.process');
-Route::post('/payment/{booking_id}', [PaymentController::class, 'processSuccess'])->name('payment.submit');
-Route::get('/success', [PaymentController::class, 'shimi'])->name('success.shimi');
+Route::middleware(['auth'])->group(function () {
+    Route::get('/payment', [PaymentController::class, 'index'])->name('payment');
+    Route::post('/payment/{booking_id}', [PaymentController::class, 'processSuccess'])->name('payment.submit');
+    Route::get('/success', [PaymentController::class, 'shimi'])->name('success.shimi');
+});
 
 Route::middleware(['auth'])->get('/profile', function () {
     return view('profile.show');
@@ -112,7 +123,6 @@ Route::get('/rooms', [RoomController::class, 'index'])->name('rooms');
 Route::post('/bookings', [BookingController::class, 'store'])->name('bookings.store');
 Route::get('payment', [PaymentController::class, 'index'])->name('payment');
 
-Route::get('/reviews/{review}/edit', [ReviewController::class, 'edit'])->name('reviews.edit');
-Route::put('/reviews/{review}', [ReviewController::class, 'update'])->name('reviews.update');
+
 
 

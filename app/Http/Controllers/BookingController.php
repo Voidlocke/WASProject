@@ -43,7 +43,7 @@ class BookingController extends Controller
     {
         $bookings = Booking::with(['user', 'room'])->get();
         $users = User::all();
-        $rooms = Room::all();
+        $rooms = Room::where('availability', '>', 0)->get();
 
         return view('admin', compact('bookings', 'users', 'rooms'));
 
@@ -70,10 +70,10 @@ public function store(Request $request)
     }
 
     // Fetch the first room as an example (You can change the logic as needed)
-    $room = DB::table('rooms')->where('room_id', $request->room_id)->first();
+    $room = Room::where('room_id', $request->room_id)->where('availability', '>', 0)->first();
 
     if (!$room) {
-        return redirect()->back()->with('error', 'No rooms available for booking.');
+        return redirect()->back()->with('error', 'This room is completely booked');
     }
 
     // Generate a unique booking ID
@@ -89,6 +89,9 @@ public function store(Request $request)
         'guest_count' => $latestSearch->cus_count,
         'booking_status' => 'pending', // Default status
     ]);
+
+    // Reduce available room count
+    $room->decrement('availability');
 
     // Store booking data in the session for later use
     session([
@@ -148,6 +151,17 @@ public function adminStore(Request $request)
             'guest_count' => 'required|integer|',
             'booking_status' => 'nullable|string',
         ]);
+
+        $room = Room::where('room_id', $request->room_id)
+        ->where('availability', '>', 0)
+        ->first();
+
+        if (!$room) {
+            return redirect()->back()
+                ->withInput()
+                ->with('error', 'Selected room is fully booked.');
+        }
+
         $booking_id = 'BOOK-' . strtoupper(uniqid());
         $guestCount = $request->input('guest_count', 1); // Default to 1 if not provided
         $bookingStatus = $request->input('booking_status', 'pending'); // Default to 'pending' if not provided
@@ -161,6 +175,9 @@ public function adminStore(Request $request)
             'guest_count' => $request->guest_count,
             'booking_status' => $request->booking_status ,
         ]);
+
+        //Reduce availability
+        $room->decrement('availability');
 
         return redirect()->route('admin.index')->with('success', 'Booking added successfully.');
     }
@@ -186,13 +203,29 @@ public function adminStore(Request $request)
             'booking_status' => 'nullable|string',
         ]);
 
-        $bookings->update([
-            'room_id' => $validatedData['room_id'],
-            'check_in_date' => $validatedData['check_in_date'],
-            'check_out_date' => $validatedData['check_out_date'],
-            'guest_count' => $request->input('guest_count'),
-            'booking_status' => $request->input('booking_status'),
-        ]);
+        // If room changed, fix availability
+        if ($bookings->room_id !== $validatedData['room_id']) {
+
+            // Restore old room
+            Room::where('room_id', $bookings->room_id)
+                ->increment('availability');
+
+            // Check new room availability
+            $newRoom = Room::where('room_id', $validatedData['room_id'])
+                ->where('availability', '>', 0)
+                ->first();
+
+            if (!$newRoom) {
+                return redirect()->back()
+                    ->withInput()
+                    ->with('error', 'Selected room is fully booked.');
+            }
+
+            // Reduce new room availability
+            $newRoom->decrement('availability');
+        }
+
+        $bookings->update($validatedData,);
 
         return redirect()->route('admin.index')->with('success', 'Booking edited successfully.');
 
@@ -202,6 +235,12 @@ public function adminStore(Request $request)
     public function destroy(Request $request, $booking_id)
     {
         $bookings = Booking::findOrFail($booking_id);
+
+        $room = Room::where('room_id', $bookings->room_id)->first();
+        if ($room) {
+            $room->increment('availability');
+        }
+
         $bookings->delete();
 
         return redirect()->route('admin.index')->with('success', 'Booking deleted successfully.');

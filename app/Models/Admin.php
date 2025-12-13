@@ -6,6 +6,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Hash;
 
 class Admin extends Authenticatable
 {
@@ -27,11 +28,6 @@ class Admin extends Authenticatable
         'admin_pass',
     ];
 
-    public function index()
-    {
-        // Return the admin dashboard view
-        return view('admin');
-    }
 
     // Define relationship with the Booking model
     public function booking()
@@ -52,12 +48,6 @@ class Admin extends Authenticatable
     public function getAuthPassword()
     {
         return $this->admin_pass; // Column name for the password
-    }
-
-    // Override validateCredentials to use custom 'admin_pass'
-    public static function validateCredentials($user, array $credentials)
-    {
-        return Hash::check($credentials['admin_pass'], $user->getAuthPassword());
     }
 
     // Hash the password when setting it

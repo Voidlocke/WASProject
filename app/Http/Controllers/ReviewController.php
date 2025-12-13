@@ -9,6 +9,7 @@ use App\Models\Booking;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Support\Str;
 
 class ReviewController extends Controller
 {
@@ -16,23 +17,11 @@ class ReviewController extends Controller
 
     public function index()
     {
-        // Fetch all reviews
-        $reviews = Review::all();
+        $reviews = Review::with(['booking.room'])->get();
         $averageRating = $reviews->avg('rating');
 
-        // Fetch the latest booking for each review
-        foreach ($reviews as $review) {
-            $latestBooking = Booking::where('user_id', $review->user_id)->latest()->first();
-            if ($latestBooking) {
-                $review->room_type = Room::find($latestBooking->room_id)->type;
-                $review->check_in = $latestBooking->check_in_date;
-            } else {
-                $review->room_type = 'Unknown';
-                $review->check_in = 'Unknown';
-            }
-        }
-
         return view('reviews', compact('reviews', 'averageRating'));
+
     }
 
     public function store(Request $request)
@@ -51,29 +40,24 @@ class ReviewController extends Controller
 
         $user = Auth::user();
         $userId = $user ? $user->id : 0;
-        $userName = $user ? $user->name : 'Anonymous';
 
-        $latestBooking = Booking::where('user_id', $userId)->latest()->first();
+        $latestBooking = Booking::where('user_id', $user->id)->latest()->first();
         if (!$latestBooking) {
             return redirect()->back()->with('error', 'No booking found for the user.');
         }
 
-        $room = Room::findOrFail($latestBooking->room_id);
-
-        $review = new Review();
-        $review->user_id = $userId;
-        $review->user_name = $userName;
-        $review->rating = $request->input('rating');
-        $review->comfort = $request->input('comfort');
-        $review->staff = $request->input('staff');
-        $review->facilities = $request->input('facilities');
-        $review->value = $request->input('value');
-        $review->review_text = $request->input('review_text');
-        $review->review_date = now();
-
-
-
-        $review->save();
+        Review::create([
+            'user_id'     => $user->id,
+            'user_name'   => $user->name,
+            'booking_id'  => $latestBooking->booking_id,
+            'rating'      => $request->rating,
+            'comfort'     => $request->comfort,
+            'staff'       => $request->staff,
+            'facilities'  => $request->facilities,
+            'value'       => $request->value,
+            'review_text' => Str::of($request->review_text)->stripTags(),
+            'review_date' => now(),
+        ]);
         return redirect()->back()->with('success', 'Review submitted successfully.');
     }
 
@@ -98,7 +82,7 @@ class ReviewController extends Controller
             'review_text' => 'required|string|max:255',
         ]);
 
-        $review->review_text = $request->input('review_text');
+        $review->review_text = Str::of($request->review_text)->stripTags();
         $review->save();
 
         return redirect()->route('reviews.index')->with('success', 'Review updated successfully.');

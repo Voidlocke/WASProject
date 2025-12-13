@@ -15,6 +15,7 @@ class ReviewSeeder extends Seeder
             [
                 'review_id' => 'rev12',
                 'user_id' => $users[0],
+                'booking_id' => 'A445',
                 'user_name' => $name [0],
                 'rating' => 5.0,
                 'review_text' => 'Great room and service!',
@@ -23,6 +24,7 @@ class ReviewSeeder extends Seeder
             [
                 'review_id' => 'rev123',
                 'user_id' => $users[1],
+                'booking_id' => 'ABC1234',
                 'user_name' => $name[1],
                 'rating' => 4.5,
                 'review_text' => 'Comfortable stay.',

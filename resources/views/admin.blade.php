@@ -6,6 +6,12 @@
     use Carbon\Carbon;
 @endphp
 
+@if (session('error'))
+    <div class="alert alert-danger">
+        {{ session('error') }}
+    </div>
+@endif
+
 <div class="hero-wrap" style="background-image: url('images/bg_1.jpg');">
     <div class="overlay"></div>
     <div class="container">
