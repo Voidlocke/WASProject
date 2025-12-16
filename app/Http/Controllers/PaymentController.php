@@ -33,7 +33,7 @@ class PaymentController extends Controller
     {
         $request->validate([
             'card_name' => 'required|string|max:50',
-            'card_number' => 'required|numeric',
+            'card_number' => 'required|digits:16',
             // MM/YY format
             'expiry_date' => ['required', 'regex:/^(0[1-9]|1[0-2])\/\d{2}$/'],
             'ccv' => 'required|digits:3',

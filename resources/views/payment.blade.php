@@ -92,23 +92,90 @@
 
             <div class="form-group">
                 <label for="card_name">CardHolder Name</label>
-                <input type="text" name="card_name" id="card_name" required class="form-control">
+                <input
+                    type="text"
+                    name="card_name"
+                    id="card_name"
+                    class="form-control"
+                    required
+                    value="{{ old('card_name') }}"
+                >
+                @error('card_name')
+                    <div class="text-danger">{{ $message }}</div>
+                @enderror
             </div>
+
 
             <div class="form-group">
                 <label for="card_number">Card Number</label>
-                <input type="number" name="card_number" id="card_number" required class="form-control">
+                <input
+                    type="text"
+                    name="card_number"
+                    id="card_number"
+                    class="form-control"
+                    placeholder="0000 0000 0000 0000"
+                    required
+                    maxlength="19"
+                    inputmode="numeric"
+                    oninput=
+                    "
+                        let v = this.value.replace(/[^0-9]/g,'').slice(0,16);
+                        let parts = v.match(/.{1,4}/g);
+                        this.value = parts ? parts.join(' ') : '';
+                    "
+                    value="{{ old('card_number') }}"
+                >
+                @error('card_number')
+                    <div class="text-danger" style="font-size: 0.9em;">{{ $message }}</div>
+                @enderror
             </div>
+
 
             <div class="form-group">
                 <label for="expiry_date">Expiry Date</label>
-                <input type="text" name="expiry_date" id="expiry_date" placeholder="MM/YY" required class="form-control">
+                <input
+                    type="text"
+                    name="expiry_date"
+                    id="expiry_date"
+                    class="form-control"
+                    placeholder="MM/YY"
+                    required
+                    maxlength="5"
+                    inputmode="numeric"
+                    oninput=
+                    "
+                        let v = this.value.replace(/[^0-9]/g,'').slice(0,4);
+                        if (v.length >= 3) v = v.slice(0,2) + '/' + v.slice(2);
+                        this.value = v;
+                    "
+                    value="{{ old('expiry_date') }}"
+                >
+                @error('expiry_date')
+                    <div class="text-danger" style="font-size: 0.9em;">{{ $message }}</div>
+                @enderror
             </div>
 
+
             <div class="form-group">
-                <label for="cvv">CVV</label>
-                <input type="number" name="ccv" id="ccv" required class="form-control">
+                <label for="ccv">CVV</label>
+                <input
+                    type="text"
+                    name="ccv"
+                    id="ccv"
+                    class="form-control"
+                    required
+                    maxlength="3"
+                    inputmode="numeric"
+                    pattern="\d{3}"
+                    value="{{ old('ccv') }}"
+                >
+                @error('ccv')
+                    <div class="text-danger">{{ $message }}</div>
+                @enderror
             </div>
+
+
+
 
             <button type="submit" class="btn-post">Make Payment</button>
         </form>
