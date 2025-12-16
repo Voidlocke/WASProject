@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use App\Http\Requests\StoreBookingRequest;
 
 class BookingController extends Controller
 {
@@ -39,6 +40,7 @@ class BookingController extends Controller
     {
         return $this->belongsTo(Room::class);
     }
+
     public function index(Request $request)
     {
         $bookings = Booking::with(['user', 'room'])->get();
@@ -46,102 +48,77 @@ class BookingController extends Controller
         $rooms = Room::where('availability', '>', 0)->get();
 
         return view('admin', compact('bookings', 'users', 'rooms'));
-
-
-}
-
-public function store(Request $request)
-{
-    // Authorization check - verify user can create bookings
-    $this->authorize('create', Booking::class);
-
-    // Retrieve the authenticated user's ID
-    $userId = Auth::id();
-
-    if (!$userId) {
-        return redirect()->back()->with('error', 'You must be logged in to book a room.');
     }
 
-    // Fetch the latest search data
-    $latestSearch = DB::table('search')->orderBy('search_id', 'desc')->first();
+    /**
+     * CUSTOMER BOOKING FLOW
+     * Principle #4: Stored Procedure (atomic booking creation + availability decrement)
+     */
+    public function store(StoreBookingRequest $request)
+    {
 
-    if (!$latestSearch) {
-        return redirect()->back()->with('error', 'No search criteria found.');
+        $this->authorize('create', Booking::class);
+
+        $userId = Auth::id();
+        if (!$userId) {
+            return redirect()->back()->with('error', 'You must be logged in to book a room.');
+        }
+
+        $latestSearch = DB::table('search')->orderBy('search_id', 'desc')->first();
+        if (!$latestSearch) {
+            return redirect()->back()->with('error', 'No search criteria found.');
+        }
+
+        // UI-friendly check first (DB will check again inside the procedure)
+        $room = Room::where('room_id', $request->room_id)
+            ->where('availability', '>', 0)
+            ->first();
+
+        if (!$room) {
+            return redirect()->back()->with('error', 'This room is completely booked');
+        }
+
+        $bookingId = 'BOOK-' . strtoupper(uniqid());
+
+        // ✅ Stored Procedure call (also parameterized = Principle #2)
+        try {
+            DB::select('CALL sp_create_booking(?, ?, ?, ?, ?, ?)', [
+                $bookingId,
+                (int) $userId,
+                $room->room_id,
+                $latestSearch->checkin_date,
+                $latestSearch->checkout_date,
+                (int) $latestSearch->cus_count,
+            ]);
+        } catch (\Throwable $e) {
+            return redirect()->back()->with('error', 'Unable to create booking: ' . $e->getMessage());
+        }
+
+        // Retrieve booking created by stored procedure
+        $booking = Booking::where('booking_id', $bookingId)->first();
+        if (!$booking) {
+            return redirect()->back()->with('error', 'Booking created but could not be retrieved.');
+        }
+
+        // Refresh room (availability already decreased in DB)
+        $room->refresh();
+
+        session([
+            'booking_id' => $booking->booking_id,
+            'room_id' => $room->room_id,
+            'room_type' => $room->type,
+            'check_in_date' => $booking->check_in_date,
+            'check_out_date' => $booking->check_out_date,
+            'price' => $room->prices,
+            'guest_count' => $booking->guest_count
+        ]);
+
+        return redirect()->route('payment');
+
     }
 
-    // Fetch the first room as an example (You can change the logic as needed)
-    $room = Room::where('room_id', $request->room_id)->where('availability', '>', 0)->first();
-
-    if (!$room) {
-        return redirect()->back()->with('error', 'This room is completely booked');
-    }
-
-    // Generate a unique booking ID
-    $bookingId = 'BOOK-' . strtoupper(uniqid());
-
-    // Create a new booking
-    $booking = Booking::create([
-        'booking_id' => $bookingId,
-        'user_id' => $userId,
-        'room_id' => $room->room_id,
-        'check_in_date' => $latestSearch->checkin_date,
-        'check_out_date' => $latestSearch->checkout_date,
-        'guest_count' => $latestSearch->cus_count,
-        'booking_status' => 'pending', // Default status
-    ]);
-
-    // Reduce available room count
-    $room->decrement('availability');
-
-    // Store booking data in the session for later use
-    session([
-        'booking_id' => $booking->booking_id,
-        'room_id' => $room->room_id,
-        'room_type' => $room->type,
-        'check_in_date' => $booking->check_in_date,
-        'check_out_date' => $booking->check_out_date,
-        'price' => $room->prices,
-        'guest_count' => $booking->guest_count
-    ]);
-
-    // Redirect to the payment page with the booking details
-    return redirect()->route('payment');
-
-}
-/*
-public function store(Request $request)
-{
-    $validatedData = $request->validate([
-        'room_id' => 'required|exists:rooms,id',
-        'check_in_date' => 'required|date',
-        'check_out_date' => 'required|date|after:check_in_date',
-        'guest_count' => 'required|integer|min:1',
-    ]);
-
-    // Get the logged-in user
-    $user = Auth::user();
-    if (!$user) {
-        return redirect()->route('login')->with('error', 'You must be logged in to book a room.');
-    }
-
-    // Generate booking ID
-    $bookingId = 'BOOK-' . strtoupper(Str::random(8)); // Generate a unique booking ID
-
-    Booking::create([
-        'booking_id' => $bookingId,
-        'user_id' => $userId,
-        'room_id' => $validatedData['room_id'],
-        'check_in_date' => $validatedData['check_in_date'],
-        'check_out_date' => $validatedData['check_out_date'],
-        'guest_count' => $validatedData['guest_count'],
-        'booking_status' => 'pending',
-    ]);
-
-    return redirect()->route('payment')->with('success', 'Booking successfully created!');
-}*/
-
-//admin add booking function (jgn edit)
-public function adminStore(Request $request)
+    // admin add booking function (jgn edit)
+    public function adminStore(Request $request)
     {
         $request->validate([
             'user_id' => 'required|exists:users,id',
@@ -153,8 +130,8 @@ public function adminStore(Request $request)
         ]);
 
         $room = Room::where('room_id', $request->room_id)
-        ->where('availability', '>', 0)
-        ->first();
+            ->where('availability', '>', 0)
+            ->first();
 
         if (!$room) {
             return redirect()->back()
@@ -163,8 +140,6 @@ public function adminStore(Request $request)
         }
 
         $booking_id = 'BOOK-' . strtoupper(uniqid());
-        $guestCount = $request->input('guest_count', 1); // Default to 1 if not provided
-        $bookingStatus = $request->input('booking_status', 'pending'); // Default to 'pending' if not provided
 
         Booking::create([
             'booking_id' => $booking_id,
@@ -173,10 +148,9 @@ public function adminStore(Request $request)
             'check_in_date' => $request->check_in_date,
             'check_out_date' => $request->check_out_date,
             'guest_count' => $request->guest_count,
-            'booking_status' => $request->booking_status ,
+            'booking_status' => $request->booking_status,
         ]);
 
-        //Reduce availability
         $room->decrement('availability');
 
         return redirect()->route('admin.index')->with('success', 'Booking added successfully.');
@@ -184,17 +158,17 @@ public function adminStore(Request $request)
 
     public function edit($booking_id)
     {
-        $bookings = Booking::findOrFail($booking_id);
+        $booking = Booking::findOrFail($booking_id); // FIXED variable name
         $users = User::all();
         $rooms = Room::all();
 
         return view('edit-booking', compact('booking', 'users', 'rooms'));
     }
 
-    // admin edit booking function (jgn edit)
     public function update(Request $request, $booking_id)
     {
-        $bookings = Booking::findOrFail($booking_id);
+        $booking = Booking::findOrFail($booking_id); // FIXED variable name
+
         $validatedData = $request->validate([
             'room_id' => 'required|exists:rooms,room_id',
             'check_in_date' => 'required|date',
@@ -204,13 +178,10 @@ public function adminStore(Request $request)
         ]);
 
         // If room changed, fix availability
-        if ($bookings->room_id !== $validatedData['room_id']) {
+        if ($booking->room_id !== $validatedData['room_id']) {
 
-            // Restore old room
-            Room::where('room_id', $bookings->room_id)
-                ->increment('availability');
+            Room::where('room_id', $booking->room_id)->increment('availability');
 
-            // Check new room availability
             $newRoom = Room::where('room_id', $validatedData['room_id'])
                 ->where('availability', '>', 0)
                 ->first();
@@ -221,51 +192,25 @@ public function adminStore(Request $request)
                     ->with('error', 'Selected room is fully booked.');
             }
 
-            // Reduce new room availability
             $newRoom->decrement('availability');
         }
 
-        $bookings->update($validatedData,);
+        $booking->update($validatedData);
 
         return redirect()->route('admin.index')->with('success', 'Booking edited successfully.');
-
     }
 
-    //admin delete booking function (jgn edit)
     public function destroy(Request $request, $booking_id)
     {
-        $bookings = Booking::findOrFail($booking_id);
+        $booking = Booking::findOrFail($booking_id);
 
-        $room = Room::where('room_id', $bookings->room_id)->first();
+        $room = Room::where('room_id', $booking->room_id)->first();
         if ($room) {
             $room->increment('availability');
         }
 
-        $bookings->delete();
+        $booking->delete();
 
         return redirect()->route('admin.index')->with('success', 'Booking deleted successfully.');
     }
-
-/*    public function rooms(Request $request)
-{
-    $query = DB::table('rooms');
-    //$query = Room::query(); // Assuming you have a Room model
-
-      // Apply filters if provided
-      if ($request->has('room_type') && $request->room_type != '') {
-        $query->where('type', $request->room_type);
-    }
-     // Filter by guest count if provided
-    if ($request->has('guest_count') && $request->guest_count != '') {
-        $query->where('maxperson', '>=', $request->guest_count);
-    }
-
-    $rooms = $query->get(); //Retrieve filtered rooms
-    //$rooms = Room::all(); // Fetch all room data
-
-    // Check if the result is empty and pass a message to the view
-    $message = $rooms->isEmpty() ? 'No rooms found for the given criteria.' : null;
-
-    return view('rooms', compact('rooms', 'message'));
-}*/
 }

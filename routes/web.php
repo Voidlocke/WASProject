@@ -11,102 +11,91 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RoomController;
 
+/*
+|--------------------------------------------------------------------------
+| Public Routes
+|--------------------------------------------------------------------------
+*/
 
-Route::middleware(['auth'])->group(function () {
-    Route::resource('reviews', ReviewController::class)->except(['index']);
-});
-Route::resource('bookings', BookingController::class);
-
+// Landing / main page
 Route::get('/', function () {
     return view('mainpage');
 })->name('mainpage');
 
+// Home
 Route::get('/home', [HomeController::class, 'index'])->name('home');
 
-Route::get('/rooms', function () {
-    return view('rooms');
-});
+// Rooms page (ONLY ONE definition)
+Route::get('/rooms', [RoomController::class, 'index'])->name('rooms');
+
+// Contact page
 Route::get('/contact', function () {
     return view('contact');
 });
 
-// Admin login routes (public - with rate limiting for security)
-Route::get('/admin/login', [AdminLoginController::class, 'showLoginForm'])->name('admin.login');
-Route::post('/admin/login', [AdminLoginController::class, 'login'])
-    ->middleware('throttle:5,1')  // 5 attempts per minute
-    ->name('admin.login.submit');
-
-// Debug route - remove after testing
-Route::get('/admin/check', function() {
-    return [
-        'is_authenticated' => auth()->guard('admin')->check(),
-        'user' => auth()->guard('admin')->user(),
-        'id' => auth()->guard('admin')->id(),
-    ];
-});
-
+// Reviews (public index only)
 Route::get('/reviews', [ReviewController::class, 'index'])->name('reviews.index');
-Route::middleware(['auth'])->group(function () {
-    Route::post('/reviews', [ReviewController::class, 'store'])
-        ->name('reviews.store');
 
-    Route::get('/reviews/{review}/edit', [ReviewController::class, 'edit'])
-        ->name('reviews.edit');
+// User registration
+Route::post('/register', [RegisterController::class, 'register'])->name('register.submit');
 
-    Route::put('/reviews/{review}', [ReviewController::class, 'update'])
-        ->name('reviews.update');
-
-    Route::delete('/reviews/{review}', [ReviewController::class, 'destroy'])
-        ->name('reviews.destroy');
-});
-
-
-
-Route::post('register', [RegisterController::class, 'register'])->name('register.submit');
-
+// Login page
 Route::get('/login', function () {
     return view('auth.login');
 })->name('login');
 
-Route::get('/admin/login', [AdminLoginController::class, 'showLoginForm'])->name('admin.login');
-
-Route::middleware([
-    'auth:sanctum',
-    config('jetstream.auth_session'),
-    'verified',
-])->group(function () {
-    Route::get('/home', function () {
-        return view('mainpage');
-    })->name('home');
-});
-
-
-
-Route::get('/reviews', [ReviewController::class, 'index'])->name('reviews.index');
+/*
+|--------------------------------------------------------------------------
+| Authenticated User Routes
+|--------------------------------------------------------------------------
+*/
 
 Route::middleware(['auth'])->group(function () {
+
+    // Bookings (CRUD)
+    Route::resource('bookings', BookingController::class);
+
+    // Payment flow
     Route::get('/payment', [PaymentController::class, 'index'])->name('payment');
     Route::post('/payment/{booking_id}', [PaymentController::class, 'processSuccess'])->name('payment.submit');
     Route::get('/success', [PaymentController::class, 'shimi'])->name('success.shimi');
+
+    // Reviews (except index)
+    Route::resource('reviews', ReviewController::class)->except(['index']);
+
+    // User profile
+    Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
+    Route::put('/profile/photo', [ProfileController::class, 'updateProfilePhoto'])->name('profile.updatePhoto');
+    Route::delete('/cancel-booking/{booking_id}', [ProfileController::class, 'cancelBooking'])->name('profile.cancelBooking');
 });
 
-Route::middleware(['auth'])->get('/profile', function () {
-    return view('profile.show');
-})->name('profile.show');
+/*
+|--------------------------------------------------------------------------
+| Admin Authentication
+|--------------------------------------------------------------------------
+*/
 
-Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
-Route::put('/profile/photo', [ProfileController::class, 'updateProfilePhoto'])->name('profile.updatePhoto');
-Route::delete('/cancel-booking/{booking_id}', [ProfileController::class, 'cancelBooking'])->name('profile.cancelBooking');
+// Admin login
+Route::get('/admin/login', [AdminLoginController::class, 'showLoginForm'])->name('admin.login');
+Route::post('/admin/login', [AdminLoginController::class, 'login'])
+    ->middleware('throttle:5,1')
+    ->name('admin.login.submit');
 
-// Admin routes - Protected with isAdmin middleware
+/*
+|--------------------------------------------------------------------------
+| Admin Protected Routes
+|--------------------------------------------------------------------------
+*/
+
 Route::middleware(['isAdmin'])->prefix('admin')->group(function () {
+
     // Admin dashboard
     Route::get('/', [BookingController::class, 'index'])->name('admin.index');
 
     // Admin logout
     Route::post('/logout', [AdminLoginController::class, 'logout'])->name('admin.logout');
 
-    // Admin management
+    // Admin details
     Route::post('/details', [AdminController::class, 'admindetail'])->name('admin.details');
 
     // Admin booking management
@@ -116,13 +105,16 @@ Route::middleware(['isAdmin'])->prefix('admin')->group(function () {
     Route::delete('/bookings/{booking_id}', [BookingController::class, 'destroy'])->name('bookings.destroy');
 });
 
-//get room data from database for rooms page
-//Route::get('/rooms', [BookingController::class, 'rooms'])->name('rooms');
-Route::get('/rooms', [RoomController::class, 'index'])->name('rooms');
+/*
+|--------------------------------------------------------------------------
+| Debug (OPTIONAL – REMOVE BEFORE SUBMISSION)
+|--------------------------------------------------------------------------
+*/
 
-Route::post('/bookings', [BookingController::class, 'store'])->name('bookings.store');
-Route::get('payment', [PaymentController::class, 'index'])->name('payment');
-
-
-
-
+// Route::get('/admin/check', function () {
+//     return [
+//         'is_authenticated' => auth()->guard('admin')->check(),
+//         'user' => auth()->guard('admin')->user(),
+//         'id' => auth()->guard('admin')->id(),
+//     ];
+// });

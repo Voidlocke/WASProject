@@ -3,6 +3,8 @@
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
+use Illuminate\Database\QueryException;
+use Illuminate\Http\Request;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -18,5 +20,13 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->append(\App\Http\Middleware\ContentSecurityPolicy::class);
     })
     ->withExceptions(function (Exceptions $exceptions) {
-        //
-    })->create();
+    $exceptions->render(function (QueryException $e, Request $request) {
+        report($e);
+
+        if ($request->expectsJson()) {
+            return response()->json(['message' => 'A database error occurred.'], 500);
+        }
+
+        return response()->view('errors.500', [], 500);
+    });
+})->create();

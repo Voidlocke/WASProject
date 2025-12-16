@@ -13,9 +13,9 @@ class RoomController extends Controller
     // Store the search data in the 'search' table
     if ($request->has(['checkin_date', 'checkout_date', 'guest_count'])) {
         $request->validate([
-            'checkin_date' => 'required|date',
-            'checkout_date' => 'required|date|after:checkin_date',
-            'guest_count' => 'required|integer|min:1',
+    'checkin_date'  => ['required', 'regex:/^(0?[1-9]|1[0-2])\/(0?[1-9]|[12][0-9]|3[01])\/\d{4}$/'],
+    'checkout_date' => ['required', 'regex:/^(0?[1-9]|1[0-2])\/(0?[1-9]|[12][0-9]|3[01])\/\d{4}$/'],
+    'guest_count'   => ['required', 'integer', 'min:1', 'max:10'],
         ]);
 
         // Generate the next search_id
@@ -39,13 +39,27 @@ class RoomController extends Controller
     // Filter rooms based on search criteria
     $query = DB::table('rooms');
 
-    if ($request->has('room_type') && $request->room_type != '') {
-        $query->where('type', $request->room_type);
-    }
+    // Whitelist allowed room types
+$allowedRoomTypes = [
+    'Suite Room',
+    'Family Room',
+    'Deluxe Room',
+    'Classic Room',
+    'Superior Room',
+    'Luxury Room',
+];
 
-    if ($request->has('guest_count') && $request->guest_count != '') {
-        $query->where('maxperson', '>=', $request->guest_count);
-    }
+// Whitelist allowed guest counts
+$allowedGuestCounts = [1, 2, 3, 4, 5, 6];
+
+if ($request->filled('room_type') && in_array($request->room_type, $allowedRoomTypes, true)) {
+    $query->where('type', '=', $request->room_type);
+}
+
+if ($request->filled('guest_count') && in_array((int)$request->guest_count, $allowedGuestCounts, true)) {
+    $query->where('maxperson', '>=', (int)$request->guest_count);
+}
+
 
     $rooms = $query->get(); // Retrieve filtered rooms
 

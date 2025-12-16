@@ -6,6 +6,8 @@ namespace App\Http\Controllers;
 use App\Models\Payment;
 use App\Models\Booking;
 use Illuminate\Http\Request;
+use App\Http\Requests\StorePaymentRequest;
+
 
 class PaymentController extends Controller
 {
@@ -27,7 +29,7 @@ class PaymentController extends Controller
         return view('success');  // payment.blade.php
     }
 
-    public function processSuccess(Request $request, $booking_id)
+    public function processSuccess(StorePaymentRequest $request, $booking_id)
     {
         $request->validate([
             'card_name' => 'required|string|max:50',
