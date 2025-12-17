@@ -17,7 +17,7 @@
 ## Objectives of the Enhancements
 The objectives of enhancments are: 
 
-1. sorg satu
+1. To protect the application from malicious or invalid user input by enforcing strict validation rules, ensuring data integrity, and preventing common security attacks such as injection and XSS.
 
 2. sorg satu
 
@@ -29,15 +29,72 @@ The objectives of enhancments are:
 
 ## Web Application Security Enhancements
 
-1. User Profiles are designed to manage user accounts effectively. The creation process involves registering users with essential details such as name, email, password and contact information. Users can then read and access their profiles, including viewing their booking history and payment methods. The update feature allows users to edit their profile information, such as personal details and contact information ensuring their profiles are always up to date. In case of account deactivation, users can delete or deactivate their accounts, with admins overseeing the process.
+1. ### Input Validation
+   ### a) Register
+   ### Server-side Validation
+   gambar code
+   #### i) Name (Whitelist + Normalization)
+   - For the name input, a whitelist validation approach is applied where only alphabetic characters, spaces, apostrophes ('), hyphens (-), and dots (.) are allowed. Any other symbols or numbers are rejected. In addition, the name is normalized before being stored in the database by trimming extra spaces and converting it to Title Case, where the first letter of each word is uppercase and the remaining letters are lowercase. This ensures consistent and clean user data.
+   
+   #### ii) Password (Whitelist)
+   - The password field uses whitelist validation rules that require a minimum length of 8 characters and enforce the presence of at least one alphabetic character and one numeric digit. This ensures stronger password complexity and reduces the risk of weak or easily guessable passwords.
 
-2. Bookings system is used to handle customer reservations. Customers can create bookings by selecting their preferred dates, room type and the number of guests. Once a booking is made, customers can read and review the booking details, including booking status and dates. Admins have the ability to see and manage all bookings. Customers can update their reservations by changing the dates or the number of guests before payment. The delete feature allows customers to cancel their bookings.
+   ### Client-side Validation
+   gambar code
+   #### i) Name (Whitelist + Input Filtering)
+   - For the name input, client-side input filtering is applied using JavaScript (oninput) to restrict the characters that can be typed. Only alphabetic characters, spaces, apostrophes ('), hyphens (-), and dots (.) are allowed, while other characters such as numbers and special symbols are automatically removed. The input is also formatted in real time by collapsing multiple spaces and converting the text to Title Case to improve consistency and user experience before submission.
 
-3. Payments system manages all aspects of booking payments. Upon booking confirmation, customers will enter their bank details, including the name on the bank card, the card number, expiration date and CVV, to process the payment. Once payment is made, customers will receive receipts for their transactions, and admins can track payments and their statuses to ensure all financial records are up to date. Customers can view their payment receipts to mark payments as successful. In case of cancellations before payment confirmation, customers can cancel their payments, and admins can delete any invalid transactions that may arise.
+   ### b) Payment
+   ### Server-side Validation
+   gambar code
+   #### i) Cardholder Name (Whitelist + Normalization)
+   - A whitelist validation approach is applied to the cardholder name field where only alphabetic characters, spaces, apostrophes ('), and hyphens (-) are allowed. The input is also normalized on the server by converting it to uppercase before processing. This prevents invalid characters and ensures consistent formatting of cardholder names.
 
-4. Reviews & Ratings are for gathering customer feedback on services. After their stay, customers can create reviews and ratings for the rooms, sharing their experiences with future guests. These reviews are displayed for all to see on the booking pages, helping others make informed decisions. Customers also have the option to update their reviews within a specified timeframe, providing them with the flexibility to revise their feedback if needed. Admins monitor and delete inappropriate or spammy reviews to ensure that only valid, helpful feedback is visible.
+   #### ii) Card Number (Whitelist)
+   - The card number is validated using whitelist rules that require exactly 16 digits. To support formatted input (e.g., 0000 0000 0000 0000), the server normalizes the card number by removing spaces and non-digit characters before validation. This ensures the system only processes numeric digits and prevents invalid or manipulated values.
 
-5. ### Database Security Principles
+   #### iii) Expiry Date (Whitelist)
+   - The expiry date uses whitelist validation with a strict format rule (MM/YY). The month is restricted to valid values (01–12) and the input is rejected if it does not follow the expected pattern. This ensures the expiry value is valid and consistent.
+
+   #### iv) CVV (Whitelist)
+   - The CVV field is validated using whitelist rules that require exactly 3 digits. This prevents users from entering longer values or non-numeric input.
+
+   ### Client-side Validation
+   gambar code
+   #### i) Cardholder Name (Whitelist + Input Filtering)
+   - Client-side filtering is applied using oninput to restrict characters typed by the user. Only allowed characters remain, and the input is automatically converted to uppercase. This improves usability and prevents accidental invalid input before submission.
+
+   #### ii) Card Number (Whitelist + Formatting + Length Restriction)
+   - Client-side input formatting is applied so the card number automatically groups digits into blocks of 4 (e.g., 0000 0000 0000 0000). The form limits the card number to a maximum of 16 digits and removes any non-numeric characters during typing/paste. This improves user experience and reduces input mistakes.
+
+   #### iii) Expiry Date (Whitelist + Formatting + Length Restriction)
+   - Client-side formatting ensures the expiry date accepts only numeric input and automatically inserts a / after the first two digits, producing the MM/YY format. This helps users input the correct format more easily.
+
+   #### iv) CVV (Whitelist + Length Restriction)
+   - Client-side restrictions such as maxlength=3, numeric-only input filtering, and pattern validation ensure the user can only enter 3 digits. Any extra digits are not accepted, reducing errors.
+
+   ### c) Review
+   ### Server-side Validation
+   gambar code
+   #### i) Review Text (Whitelist)
+   - The review text uses whitelist validation to allow only letters, numbers, spaces, and basic punctuation (e.g., . , ! ? ' - ( )). Any other special symbols are rejected.
+
+   ### Client-side Validation
+   gambar code
+   #### i) Review Text (Whitelist + Input Filtering)
+   - Client-side filtering is applied on the review textarea using oninput to remove invalid characters immediately as the user types or pastes text.
+
+gambar ui
+    
+   
+
+3. Bookings system is used to handle customer reservations. Customers can create bookings by selecting their preferred dates, room type and the number of guests. Once a booking is made, customers can read and review the booking details, including booking status and dates. Admins have the ability to see and manage all bookings. Customers can update their reservations by changing the dates or the number of guests before payment. The delete feature allows customers to cancel their bookings.
+
+4. Payments system manages all aspects of booking payments. Upon booking confirmation, customers will enter their bank details, including the name on the bank card, the card number, expiration date and CVV, to process the payment. Once payment is made, customers will receive receipts for their transactions, and admins can track payments and their statuses to ensure all financial records are up to date. Customers can view their payment receipts to mark payments as successful. In case of cancellations before payment confirmation, customers can cancel their payments, and admins can delete any invalid transactions that may arise.
+
+5. Reviews & Ratings are for gathering customer feedback on services. After their stay, customers can create reviews and ratings for the rooms, sharing their experiences with future guests. These reviews are displayed for all to see on the booking pages, helping others make informed decisions. Customers also have the option to update their reviews within a specified timeframe, providing them with the flexibility to revise their feedback if needed. Admins monitor and delete inappropriate or spammy reviews to ensure that only valid, helpful feedback is visible.
+
+6. ### Database Security Principles
 
     - ***Secure Error Handling***
   
