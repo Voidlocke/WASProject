@@ -1,4 +1,4 @@
-## Group Members
+## Group Member
 - Member 1: Nasrun Asri Bin Muhammad (2210479)
 - Member 2: Sofwan Bin Aliza (2224483)
 - Member 3: Muhd Iskandar Bin Yong Fui Min (2214527)
@@ -14,17 +14,20 @@
    
   Overall, the **Hotel Management System** provides a robust and integrated approach to handling hotel operations. It simplifies complex tasks like managing payments or processing customer bookings and provide more efficient and satisfying guest experience. With its intuitive design and emphasis on data accuracy, the system enhances productivity for hotel staff while offering convenience to customers. This makes it an essential tool for modernizing hotel management processes.
     
-## Objectives of the Web Application
-The objectives of this Hotel Management System are: 
+## Objectives of the Enhancements
+The objectives of enhancments are: 
 
-1. To enable users to manage their profiles and booking details, and provide reviews through the implementation of CRUD functionalities, ensuring all user data is properly stored in the database.
+1. sorg satu
 
-2. To provide hotel administrators with tools for managing room details, monitoring reservations and handling payment records to ensure efficient data processing.
+2. sorg satu
 
-3. To implement review and rating features that allow customers to provide feedback on their stay and access reliable information for future booking decisions.
+3. sorg satu
 
-## Features and Functionalities of the Web Application
-The features and functionalities of Hotel Management System is equipped with five main features: User Profiles, Bookings, Reviews & Ratings, Payments and Admin Control Panel. The system allows for smooth management of user accounts, easy booking processes, valuable guest feedback through reviews, and secure payment transactions. By integrating these functionalities, Moonlit Lagoon Hotel enhances both customer satisfaction and operational efficiency, creating a comprehensive solution for modern hotel management system.
+4. sorg satu
+
+5. To strengthen the security of the Hotel Management System by protecting the database against SQL injection attacks, unauthorized access, and data exposure, while ensuring secure, reliable, and maintainable database interactions.
+
+## Web Application Security Enhancements
 
 1. User Profiles are designed to manage user accounts effectively. The creation process involves registering users with essential details such as name, email, password and contact information. Users can then read and access their profiles, including viewing their booking history and payment methods. The update feature allows users to edit their profile information, such as personal details and contact information ensuring their profiles are always up to date. In case of account deactivation, users can delete or deactivate their accounts, with admins overseeing the process.
 
@@ -34,50 +37,154 @@ The features and functionalities of Hotel Management System is equipped with fiv
 
 4. Reviews & Ratings are for gathering customer feedback on services. After their stay, customers can create reviews and ratings for the rooms, sharing their experiences with future guests. These reviews are displayed for all to see on the booking pages, helping others make informed decisions. Customers also have the option to update their reviews within a specified timeframe, providing them with the flexibility to revise their feedback if needed. Admins monitor and delete inappropriate or spammy reviews to ensure that only valid, helpful feedback is visible.
 
-5. Admin Control Panel are for managing the hotel management system's operations effectively. It provides admins with a full access to booking details, including guest ID and guest name, their contact number, room details, their room type and price as well as check-in and check-out dates. Admins can update booking details, such as room allocations, guest information, and check-in and check-out dates, ensuring all records are accurate and up to date. They can also manage cancellations by deleting bookings, helping to maintain an organized system. This feature streamlines booking management, allowing admins to address changes quickly and resolve issues efficiently.
+5. ### Database Security Principles
 
-## Entity-Relationship Diagram (ERD)
-The ERD Diagram of Hotel Management System
-![ER Diagram](https://github.com/user-attachments/assets/f7cbe9c4-c6e3-4c7b-9328-387962cc7fb7)
+    - ***Secure Error Handling***
+  
+      **What does this principle to the web app:**
 
+      Prevents SQL errors (table names, query fragments, column names) from leaking to the user, which attackers can use to craft more precise attacks
 
-## Sequence Diagram
-The Sequence Diagram of Hotel Management System
-![sequence diagram](https://github.com/user-attachments/assets/7e8b4feb-bc82-461a-b237-8f773acf7370)
+      **Files Modified/Created:**
 
+      bootstrap/app.php was modified
 
-## Prototype
+      Before modified,
 
-1. Home page
-![1](https://github.com/user-attachments/assets/97211a51-b6a0-4f0c-b561-40e466437bbe)
+      <img width="860" height="96" alt="image" src="https://github.com/user-attachments/assets/6c2c48ea-0c4f-43e6-a749-a4486a8b72fb" />,
 
-2. Sign up Page 
-![2](https://github.com/user-attachments/assets/712407bc-8bd8-4952-9fdb-ea067ddcbe0a)
+      After modified,
 
-3. Log in (Guest) Page
-![3](https://github.com/user-attachments/assets/5f531e7e-e9bb-4194-b0cc-8079ae294705)
+      <img width="496" height="43" alt="image" src="https://github.com/user-attachments/assets/b0670aa8-d6ff-44c4-82fe-76f66fa25f86" />
 
-4. User Profile Page
-![5](https://github.com/user-attachments/assets/6c8a4ced-d1f9-4766-b032-3ffe342b8ac4)
-![6](https://github.com/user-attachments/assets/356d843d-ba73-4afa-8e1b-0de5a74b57eb)
+      <img width="871" height="259" alt="image" src="https://github.com/user-attachments/assets/9ef63977-b173-4fc8-b60a-de46b47dc367" />
 
-6. Booking Page
-![7](https://github.com/user-attachments/assets/e1ec8c16-aceb-4959-aae7-a7b96ff81770)
+      New file resources/views/errors/500.blade.php also was created to support the modified file
 
-7. Payment Page
- ![10](https://github.com/user-attachments/assets/605711ca-d62b-40b7-901e-c93c4f08af07)
-![11](https://github.com/user-attachments/assets/d9388726-6291-4ab2-aeb6-50531f9a00a2)
+      <img width="1444" height="373" alt="image" src="https://github.com/user-attachments/assets/39843b46-093a-4d3b-9540-e572a562d2a1" />
 
-8. Reviews and Ratings Page
-![9](https://github.com/user-attachments/assets/cebaf395-c47d-440d-9768-b7bde65432cf)
+   - ***Input Validation (Whitelisting)***
 
-9. Log in (Admin) Page
-![4](https://github.com/user-attachments/assets/f723d1bf-1955-4088-95a5-a73a72e271d3)
+      **What does this principle to the web app:**
 
-10. Admin Control Panel Page
-![8](https://github.com/user-attachments/assets/29f989de-9250-4250-b037-f7882b77e89e)
+     Previous web application state accepts many user-controlled inputs that affect database records, such as room_id, checkin_date, checkout_date, guest_count, card_number. If these are not strictly validated, attackers can send malformed or malicious payload. This principle only allow expected formats/values and not try to filter bad things.
 
-   
+     **Files Modified/Created:**
+
+     app/Http/Controllers/BookingController.php
+
+     Before modified,
+
+     <img width="766" height="249" alt="image" src="https://github.com/user-attachments/assets/8cd5f9b9-391c-44e5-afd1-3202cbadd9f9" />
+
+     After nodified,
+
+     <img width="662" height="48" alt="image" src="https://github.com/user-attachments/assets/5ad798a0-f1fb-4325-afb5-405f4f06a746" />
+
+     <img width="959" height="465" alt="image" src="https://github.com/user-attachments/assets/bd672906-21fe-43b9-bcaa-b5ae996d54ee" />
+
+     New file app/Http/Requests/StoreBookingRequest.php also was created to support the modified file
+
+     <img width="931" height="494" alt="image" src="https://github.com/user-attachments/assets/54515825-71fe-4994-a096-e36c11e70337" />
+
+     app/Http/Controllers/RoomController.php
+
+     Before modified,
+
+     <img width="699" height="128" alt="image" src="https://github.com/user-attachments/assets/ee7c0149-db90-4b57-98a2-4c63b205b05c" />
+
+     After modified,
+
+     <img width="1011" height="118" alt="image" src="https://github.com/user-attachments/assets/57bf718d-42a5-4fcd-a2c5-3de01eca2f26" />
+
+     app/Http/Controllers/PaymentController.php
+
+     Before modified,
+
+     <img width="680" height="193" alt="image" src="https://github.com/user-attachments/assets/8c69c8c9-bdc4-48cd-b46c-4bd80294846b" />
+
+     After modified,
+
+     <img width="569" height="53" alt="image" src="https://github.com/user-attachments/assets/4c61d2a1-80b5-476b-81bb-fe8800269182" />
+
+     <img width="801" height="222" alt="image" src="https://github.com/user-attachments/assets/d71161a4-629c-4307-b50f-251d75300297" />
+
+     New file app/Http/Requests/StorePaymentRequest.php also was created to support the modified file
+
+     <img width="833" height="551" alt="image" src="https://github.com/user-attachments/assets/4e826d2d-54e3-4785-8231-28a539ad953a" />
+
+   - ***Stored Procedures***
+
+      **What does this principle to the web app:**
+
+     This principle is used to prevent race conditions in this web application (e.g. two users booking the last room) and inconsitent data
+
+     **Files Modified/Created:**
+
+     app/Http/Controllers/BookingController.php
+
+     Before modified,
+
+     <img width="756" height="314" alt="image" src="https://github.com/user-attachments/assets/6f44cdb5-8cb6-4794-8260-61f969db70bf" />
+
+     After modified,
+
+     <img width="1125" height="520" alt="image" src="https://github.com/user-attachments/assets/623bf9cc-fbd6-4906-93bd-3f6851ca1b4c" />
+
+     New file database\migrations\2025_12_16_093152_create_stored_procedures.php also was created to support the modified file
+
+     <img width="946" height="838" alt="image" src="https://github.com/user-attachments/assets/c0720781-dfa8-4420-91cc-d05795b55f2f" />
+
+     <img width="769" height="683" alt="image" src="https://github.com/user-attachments/assets/a2a0b0c8-b3e3-4af5-9229-c4c83ee43c42" />
+
+    - ***Encrypted Database Connections (TLS/SSL)***
+
+      **What does this principle to the web app:**
+
+      This principle ensures that data transmitted between the web application server and the databse server is encrypted. Sensetive information (credentials, user data, bookings, payments) cannot be intecepted (man-in-the-middle attack) and read in plain text on the network. This is achieved by enabling TLS/SSL encryption for database connections.
+
+      **Files Modified/Created:**
+
+      .env.example
+
+      Before modified,
+
+      <img width="543" height="99" alt="image" src="https://github.com/user-attachments/assets/6f24b104-6056-4628-9836-5516cfd86a27" />
+
+      After modified,
+
+      <img width="636" height="121" alt="image" src="https://github.com/user-attachments/assets/bdc254cc-9f47-4aeb-a1f3-2515acd36c42" />
+
+      config/database.php
+
+      Before modified,
+
+      <img width="894" height="481" alt="image" src="https://github.com/user-attachments/assets/05a04dcf-998d-426b-a916-d94b45dde01a" />
+
+      After modifed,
+
+      <img width="1009" height="502" alt="image" src="https://github.com/user-attachments/assets/2e846717-c1a7-432a-8fc8-5618d727ce4c" />
+
+      Note of usage: Encrypted database connections are configured at the application level and enabled in production environments where the database is accessed over a network. For local development using XAMPP, SSL is not enforced as the database runs on the same host. TLS certificates (ca.pem) are provided by hosting provider (production) and cloud DB services.
+
+   - ***Restrict User-Controlled SQL Components***
+  
+      **What does this principle to the web app:**
+
+     This principle prevents SQL Injection and logic abuse by ensuring that users cannot control SQL structure such as column names, sort directions, table names. Only predefined, whitelisted values are allowed.
+
+     **Files Modified/Created:**
+
+     app/Http/Controllers/RoomController.php
+
+     Before modified,
+
+     <img width="685" height="181" alt="image" src="https://github.com/user-attachments/assets/c5582563-7af9-4cd2-bdde-9181e696d22e" />
+  
+     After modified,
+
+     <img width="1070" height="489" alt="image" src="https://github.com/user-attachments/assets/39c44379-59da-4a9d-a945-58f98a458c9f" />
+
 ## References
 1. Bukit Bintang Accommodation | JW Marriott Hotel Kuala Lumpur. (n.d.). Marriott Bonvoy. https://www.marriott.com/en-us/hotels/kuldt-jw-marriott-hotel-kuala-lumpur/rooms/
 2. The Regency Hotel – Kuala Lumpur. (n.d.). https://theregencyhotel.my/kualalumpur/
