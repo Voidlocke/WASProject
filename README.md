@@ -24,7 +24,6 @@ The objectives of this Hotel Management System are:
 3. To implement review and rating features that allow customers to provide feedback on their stay and access reliable information for future booking decisions.
 
 ## Web Application Security Enhancements
-The features and functionalities of Hotel Management System is equipped with five main features: User Profiles, Bookings, Reviews & Ratings, Payments and Admin Control Panel. The system allows for smooth management of user accounts, easy booking processes, valuable guest feedback through reviews, and secure payment transactions. By integrating these functionalities, Moonlit Lagoon Hotel enhances both customer satisfaction and operational efficiency, creating a comprehensive solution for modern hotel management system.
 
 1. User Profiles are designed to manage user accounts effectively. The creation process involves registering users with essential details such as name, email, password and contact information. Users can then read and access their profiles, including viewing their booking history and payment methods. The update feature allows users to edit their profile information, such as personal details and contact information ensuring their profiles are always up to date. In case of account deactivation, users can delete or deactivate their accounts, with admins overseeing the process.
 
@@ -34,7 +33,22 @@ The features and functionalities of Hotel Management System is equipped with fiv
 
 4. Reviews & Ratings are for gathering customer feedback on services. After their stay, customers can create reviews and ratings for the rooms, sharing their experiences with future guests. These reviews are displayed for all to see on the booking pages, helping others make informed decisions. Customers also have the option to update their reviews within a specified timeframe, providing them with the flexibility to revise their feedback if needed. Admins monitor and delete inappropriate or spammy reviews to ensure that only valid, helpful feedback is visible.
 
-5. Admin Control Panel are for managing the hotel management system's operations effectively. It provides admins with a full access to booking details, including guest ID and guest name, their contact number, room details, their room type and price as well as check-in and check-out dates. Admins can update booking details, such as room allocations, guest information, and check-in and check-out dates, ensuring all records are accurate and up to date. They can also manage cancellations by deleting bookings, helping to maintain an organized system. This feature streamlines booking management, allowing admins to address changes quickly and resolve issues efficiently.
+5. ### Database Security Principles
+
+    - **Secure Error Handling**
+  
+      *What does this principle to the web app:*
+
+      Prevents SQL errors (table names, query fragments, column names) from leaking to the user, which attackers can use to craft more precise attacks
+
+      *Files Modified/Created:*
+
+      bootstrap/app.php was modified
+
+      Before modified
+
+      
+   
    
 ## References
 1. Bukit Bintang Accommodation | JW Marriott Hotel Kuala Lumpur. (n.d.). Marriott Bonvoy. https://www.marriott.com/en-us/hotels/kuldt-jw-marriott-hotel-kuala-lumpur/rooms/
