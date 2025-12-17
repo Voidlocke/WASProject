@@ -45,10 +45,130 @@ The objectives of this Hotel Management System are:
 
       bootstrap/app.php was modified
 
-      Before modified
+      Before modified,
 
-      
+      <img width="860" height="96" alt="image" src="https://github.com/user-attachments/assets/6c2c48ea-0c4f-43e6-a749-a4486a8b72fb" />,
+
+      After modified,
+
+      <img width="496" height="43" alt="image" src="https://github.com/user-attachments/assets/b0670aa8-d6ff-44c4-82fe-76f66fa25f86" />
+
+      <img width="871" height="259" alt="image" src="https://github.com/user-attachments/assets/9ef63977-b173-4fc8-b60a-de46b47dc367" />
+
+      New file resources/views/errors/500.blade.php also was created to support the modified file
+
+      <img width="1444" height="373" alt="image" src="https://github.com/user-attachments/assets/39843b46-093a-4d3b-9540-e572a562d2a1" />
+
+   - ***Input Validation (Whitelisting)***
+
+      **What does this principle to the web app:**
+
+     Previous web application state accepts many user-controlled inputs that affect database records, such as room_id, checkin_date, checkout_date, guest_count, card_number. If these are not strictly validated, attackers can send malformed or malicious payload. This principle only allow expected formats/values and not try to filter bad things.
+
+     **Files Modified/Created:**
+
+     app/Http/Controllers/BookingController.php
+
+     Before modified,
+
+     <img width="766" height="249" alt="image" src="https://github.com/user-attachments/assets/8cd5f9b9-391c-44e5-afd1-3202cbadd9f9" />
+
+     After nodified,
+
+     <img width="662" height="48" alt="image" src="https://github.com/user-attachments/assets/5ad798a0-f1fb-4325-afb5-405f4f06a746" />
+
+     <img width="959" height="465" alt="image" src="https://github.com/user-attachments/assets/bd672906-21fe-43b9-bcaa-b5ae996d54ee" />
+
+     New file app/Http/Requests/StoreBookingRequest.php also was created to support the modified file
+
+     <img width="931" height="494" alt="image" src="https://github.com/user-attachments/assets/54515825-71fe-4994-a096-e36c11e70337" />
+
+     app/Http/Controllers/RoomController.php
+
+     Before modified,
+
+     <img width="699" height="128" alt="image" src="https://github.com/user-attachments/assets/ee7c0149-db90-4b57-98a2-4c63b205b05c" />
+
+     After modified,
+
+     <img width="1011" height="118" alt="image" src="https://github.com/user-attachments/assets/57bf718d-42a5-4fcd-a2c5-3de01eca2f26" />
+
+     app/Http/Controllers/PaymentController.php
+
+     Before modified,
+
+     <img width="680" height="193" alt="image" src="https://github.com/user-attachments/assets/8c69c8c9-bdc4-48cd-b46c-4bd80294846b" />
+
+     After modified,
+
+     <img width="569" height="53" alt="image" src="https://github.com/user-attachments/assets/4c61d2a1-80b5-476b-81bb-fe8800269182" />
+
+     <img width="801" height="222" alt="image" src="https://github.com/user-attachments/assets/d71161a4-629c-4307-b50f-251d75300297" />
+
+     New file app/Http/Requests/StorePaymentRequest.php also was created to support the modified file
+
+     <img width="833" height="551" alt="image" src="https://github.com/user-attachments/assets/4e826d2d-54e3-4785-8231-28a539ad953a" />
+
+   - ***Stored Procedures***
+
+      **What does this principle to the web app:**
+
+     This principle is used to prevent race conditions in this web application (e.g. two users booking the last room) and inconsitent data
+
+     **Files Modified/Created:**
+
+     app/Http/Controllers/BookingController.php
+
+     Before modified,
+
+     <img width="756" height="314" alt="image" src="https://github.com/user-attachments/assets/6f44cdb5-8cb6-4794-8260-61f969db70bf" />
+
+     After modified,
+
+     <img width="1125" height="520" alt="image" src="https://github.com/user-attachments/assets/623bf9cc-fbd6-4906-93bd-3f6851ca1b4c" />
+
+     New file database\migrations\2025_12_16_093152_create_stored_procedures.php also was created to support the modified file
+
+     <img width="946" height="838" alt="image" src="https://github.com/user-attachments/assets/c0720781-dfa8-4420-91cc-d05795b55f2f" />
+
+     <img width="769" height="683" alt="image" src="https://github.com/user-attachments/assets/a2a0b0c8-b3e3-4af5-9229-c4c83ee43c42" />
+
+    - ***Encrypted Database Connections (TLS/SSL)***
+
+      **What does this principle to the web app:**
+
+      This principle ensures that data transmitted between the web application server and the databse server is encrypted. Sensetive information (credentials, user data, bookings, payments) cannot be intecepted (man-in-the-middle attack) and read in plain text on the network. This is achieved by enabling TLS/SSL encryption for database connections.
+
+      **Files Modified/Created:**
+
+      .env
+
+      Before modified,
+
+      <img width="543" height="99" alt="image" src="https://github.com/user-attachments/assets/6f24b104-6056-4628-9836-5516cfd86a27" />
+
+      After modified,
+
+      <img width="636" height="121" alt="image" src="https://github.com/user-attachments/assets/bdc254cc-9f47-4aeb-a1f3-2515acd36c42" />
+
+      config/database.php
+
+      Before modified,
+
+      <img width="894" height="481" alt="image" src="https://github.com/user-attachments/assets/05a04dcf-998d-426b-a916-d94b45dde01a" />
+
+      After modifed,
+
+      <img width="1009" height="502" alt="image" src="https://github.com/user-attachments/assets/2e846717-c1a7-432a-8fc8-5618d727ce4c" />
+
+
+
+
    
+
+
+
+     
    
 ## References
 1. Bukit Bintang Accommodation | JW Marriott Hotel Kuala Lumpur. (n.d.). Marriott Bonvoy. https://www.marriott.com/en-us/hotels/kuldt-jw-marriott-hotel-kuala-lumpur/rooms/
