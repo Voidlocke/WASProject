@@ -33,6 +33,11 @@ The objectives of enhancments are:
    ### 1. Register
    ### a) Server-side Validation
    ![Alt text](gambar/codebeforeregisterserver.png)
+   Figure 1: Code in RegisterController.php before enhancement.
+
+   ![Alt text](gambar/codeafterregisterserver.png)
+   Figure 2: Code in RegisterController.php after enhancement.
+   
    #### i) Name (Whitelist + Normalization)
    - For the name input, a whitelist validation approach is applied where only alphabetic characters, spaces, apostrophes ('), hyphens (-), and dots (.) are allowed. Any other symbols or numbers are rejected. In addition, the name is normalized before being stored in the database by trimming extra spaces and converting it to Title Case, where the first letter of each word is uppercase and the remaining letters are lowercase. This ensures consistent and clean user data.
    
@@ -40,13 +45,30 @@ The objectives of enhancments are:
    - The password field uses whitelist validation rules that require a minimum length of 8 characters and enforce the presence of at least one alphabetic character and one numeric digit. This ensures stronger password complexity and reduces the risk of weak or easily guessable passwords.
 
    ### b) Client-side Validation
-   gambar code
+   ![Alt text](gambar/codebeforeregisterclient.png)
+   Figure 3: Code in register.blade.php before enhancement.
+
+   ![Alt text](gambar/codeafterregisterclient.png)
+   Figure 4: Code in register.blade.php after enhancement.
+   
    #### i) Name (Whitelist + Input Filtering)
    - For the name input, client-side input filtering is applied using JavaScript (oninput) to restrict the characters that can be typed. Only alphabetic characters, spaces, apostrophes ('), hyphens (-), and dots (.) are allowed, while other characters such as numbers and special symbols are automatically removed. The input is also formatted in real time by collapsing multiple spaces and converting the text to Title Case to improve consistency and user experience before submission.
 
+   ### c) User Interface (UI)
+   ![Alt text](gambar/uibeforeregister.png)
+   Figure 5: User interface in register page before enhancement.
+
+   ![Alt text](gambar/uiafterregister.png)
+   Figure 6: User interface in register page after enhancement.
+
    ### 2. Payment
    ### a) Server-side Validation
-   gambar code
+   ![Alt text](gambar/codebeforepaymentserver.png)
+   Figure 7: Code in PaymentController.php before enhancement.
+
+   ![Alt text](gambar/codeafterpaymentserver.png)
+   Figure 8: Code in PaymentController.php after enhancement.
+   
    #### i) Cardholder Name (Whitelist + Normalization)
    - A whitelist validation approach is applied to the cardholder name field where only alphabetic characters, spaces, apostrophes ('), and hyphens (-) are allowed. The input is also normalized on the server by converting it to uppercase before processing. This prevents invalid characters and ensures consistent formatting of cardholder names.
 
@@ -60,7 +82,15 @@ The objectives of enhancments are:
    - The CVV field is validated using whitelist rules that require exactly 3 digits. This prevents users from entering longer values or non-numeric input.
 
    ### b) Client-side Validation
-   gambar code
+   ![Alt text](gambar/codebeforepaymentclient.png)
+   Figure 9: Code in payment.blade.php before enhancement.
+
+   ![Alt text](gambar/codeafterpaymentclientname.png)
+   ![Alt text](gambar/codeafterpaymentclientnumber.png)
+   ![Alt text](gambar/codeafterpaymentclientdate.png)
+   ![Alt text](gambar/codeafterpaymentclientccv.png)
+   Figure 10: Code in payment.blade.php after enhancement.
+   
    #### i) Cardholder Name (Whitelist + Input Filtering)
    - Client-side filtering is applied using oninput to restrict characters typed by the user. Only allowed characters remain, and the input is automatically converted to uppercase. This improves usability and prevents accidental invalid input before submission.
 
@@ -73,19 +103,41 @@ The objectives of enhancments are:
    #### iv) CVV (Whitelist + Length Restriction)
    - Client-side restrictions such as maxlength=3, numeric-only input filtering, and pattern validation ensure the user can only enter 3 digits. Any extra digits are not accepted, reducing errors.
 
+   ### c) User Interface (UI)
+   ![Alt text](gambar/uibeforepayment.png)
+   Figure 11: User interface in payment page before enhancement.
+
+   ![Alt text](gambar/uiafterpayment.png)
+   Figure 12: User interface in payment page after enhancement.
+
    ### 3. Review
    ### a) Server-side Validation
-   gambar code
+   ![Alt text](gambar/codebeforereviewserver.png)
+   Figure 13: Code in ReviewController.php before enhancement.
+
+   ![Alt text](gambar/codeafterreviewserver.png)
+   Figure 14: Code in ReviewController.php after enhancement.
+   
    #### i) Review Text (Whitelist)
    - The review text uses whitelist validation to allow only letters, numbers, spaces, and basic punctuation (e.g., . , ! ? ' - ( )). Any other special symbols are rejected.
 
    ### b) Client-side Validation
-   gambar code
+   ![Alt text](gambar/codebeforereviewclient.png)
+   Figure 15: Code in reviews.blade.php before enhancement.
+
+   ![Alt text](gambar/codeafterreviewclient.png)
+   Figure 16: Code in reviews.blade.php after enhancement.
+   
    #### i) Review Text (Whitelist + Input Filtering)
    - Client-side filtering is applied on the review textarea using oninput to remove invalid characters immediately as the user types or pastes text.
 
-gambar ui
-    
+   ### c) User Interface (UI)
+   ![Alt text](gambar/uibeforereview.png)
+   Figure 17: User interface in reviews page before enhancement.
+
+   ![Alt text](gambar/uiafterreview.png)
+   Figure 18: User interface in reviews page after enhancement.
+   
    
 
 3. Bookings system is used to handle customer reservations. Customers can create bookings by selecting their preferred dates, room type and the number of guests. Once a booking is made, customers can read and review the booking details, including booking status and dates. Admins have the ability to see and manage all bookings. Customers can update their reservations by changing the dates or the number of guests before payment. The delete feature allows customers to cancel their bookings.
