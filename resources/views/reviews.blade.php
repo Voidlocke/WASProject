@@ -75,7 +75,7 @@
             <input type="hidden" name="value" id="value-score" >
             <br>
             <p>Tell us what you loved and how we can make your next stay even better!</p>
-            <textarea name="review_text" placeholder="Your review..." required></textarea>
+            <textarea name="review_text" placeholder="Your review..." required maxlength="255" oninput="this.value = this.value.replace(/[^A-Za-z0-9\s.,!?'\-()]/g,'');"></textarea>
             {{--<p>What You Don't Like About Your Stay</p>
             <textarea name="negativereview_text" placeholder="Your review..." required></textarea>--}}
             <button type="submit" class="btn-post">Post Review</button>

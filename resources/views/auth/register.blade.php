@@ -21,7 +21,14 @@
 
             <div>
                 <x-label for="name" value="{{ __('Name') }}" />
-                <x-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name')" required autofocus autocomplete="name" />
+                <x-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name')" required autofocus autocomplete="name"
+                oninput="
+                    this.value = this.value
+                    .replace(/[^A-Za-z.\s'\-]/g,'')
+                    .replace(/\s+/g,' ')
+                    .toLowerCase()
+                    .replace(/\b\w/g, c => c.toUpperCase());
+                " />
             </div>
 
             <div class="mt-4">

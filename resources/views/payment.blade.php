@@ -98,6 +98,12 @@
                     id="card_name"
                     class="form-control"
                     required
+                    oninput=
+                    "
+                        this.value = this.value
+                        .replace(/[^A-Za-z\s'\-]/g, '')  // block numbers & special chars
+                        .toUpperCase();                  // auto uppercase
+                    "
                     value="{{ old('card_name') }}"
                 >
                 @error('card_name')
@@ -167,6 +173,7 @@
                     maxlength="3"
                     inputmode="numeric"
                     pattern="\d{3}"
+                    oninput="this.value=this.value.replace(/[^0-9]/g,'').slice(0,3);"
                     value="{{ old('ccv') }}"
                 >
                 @error('ccv')

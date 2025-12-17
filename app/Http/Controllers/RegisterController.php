@@ -14,7 +14,12 @@ class RegisterController extends Controller
     {
         // Validate the registration data
         $validator = Validator::make($request->all(), [
-            'name' => 'required|string|max:50',
+            'name' => [
+                'required',
+                'string',
+                'max:50',
+                "regex:/^[A-Za-z.\s'\-]+$/"
+            ],
             'email' => 'required|string|email|max:255|unique:users', // Email should be unique
             'password' => [
                 'required',
@@ -39,8 +44,13 @@ class RegisterController extends Controller
         }
 
         // Create the new user
+        // Normalize name (trim, remove double spaces, Title Case)
+        $name = trim($request->name);
+        $name = preg_replace('/\s+/', ' ', $name);
+        $name = ucwords(strtolower($name));
+
         $user = User::create([
-            'name' => $request->name,
+            'name' => $name,
             'email' => $request->email,
             'password' => Hash::make($request->password), // Hash the password before storing it
         ]);

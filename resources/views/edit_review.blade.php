@@ -20,7 +20,7 @@
         @method('PUT')
         <div class="form-group">
             <label for="review_text">Tell us what you loved and how we can make your next stay even better!</label>
-            <textarea name="review_text" id="review_text" class="form-control" required>{{ $review->review_text }}</textarea>
+            <textarea name="review_text" id="review_text" class="form-control" required maxlength="255" oninput="this.value = this.value.replace(/[^A-Za-z0-9\s.,!?'\-()]/g,'');">{{ $review->review_text }}</textarea>
         </div>
 
 

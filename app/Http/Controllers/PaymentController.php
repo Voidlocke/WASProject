@@ -32,7 +32,7 @@ class PaymentController extends Controller
     public function processSuccess(StorePaymentRequest $request, $booking_id)
     {
         $request->validate([
-            'card_name' => 'required|string|max:50',
+            'card_name' => ['required', 'string', 'max:50', "regex:/^[A-Za-z\s'\-]+$/"],
             'card_number' => 'required|digits:16',
             // MM/YY format
             'expiry_date' => ['required', 'regex:/^(0[1-9]|1[0-2])\/\d{2}$/'],

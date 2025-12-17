@@ -29,7 +29,12 @@ class ReviewController extends Controller
         $this->authorize('create', Review::class);
 
         $request->validate([
-            'review_text' => 'required|string|max:255',
+            'review_text' => [
+                'required',
+                'string',
+                'max:255',
+                "regex:/^[A-Za-z0-9\s.,!?'\-()]+$/"
+            ],
             'rating' => 'required|numeric|min:0|max:5',
             'comfort' => 'required|numeric|min:0|max:5',
             'staff' => 'required|numeric|min:0|max:5',
@@ -78,7 +83,12 @@ class ReviewController extends Controller
         $this->authorize('update', $review);
 
         $request->validate([
-            'review_text' => 'required|string|max:255',
+            'review_text' => [
+                'required',
+                'string',
+                'max:255',
+                "regex:/^[A-Za-z0-9\s.,!?'\-()]+$/"
+            ],
         ]);
 
         $review->review_text = Str::of($request->review_text)->stripTags();
