@@ -141,7 +141,7 @@ The objectives of this Hotel Management System are:
 
       **Files Modified/Created:**
 
-      .env
+      .env.example
 
       Before modified,
 
@@ -160,6 +160,30 @@ The objectives of this Hotel Management System are:
       After modifed,
 
       <img width="1009" height="502" alt="image" src="https://github.com/user-attachments/assets/2e846717-c1a7-432a-8fc8-5618d727ce4c" />
+
+      Note of usage: Encrypted database connections are configured at the application level and enabled in production environments where the database is accessed over a network. For local development using XAMPP, SSL is not enforced as the database runs on the same host. TLS certificates (ca.pem) are provided by hosting provider (production) and cloud DB services.
+
+   - ***Restrict User-Controlled SQL Components***
+  
+      **What does this principle to the web app:**
+
+     This principle prevents SQL Injection and logic abuse by ensuring that users cannot control SQL structure such as column names, sort directions, table names. Only predefined, whitelisted values are allowed.
+
+     **Files Modified/Created:**
+
+     app/Http/Controllers/RoomController.php
+
+     Before modified,
+
+     <img width="685" height="181" alt="image" src="https://github.com/user-attachments/assets/c5582563-7af9-4cd2-bdde-9181e696d22e" />
+  
+     After modified,
+
+     <img width="1070" height="489" alt="image" src="https://github.com/user-attachments/assets/39c44379-59da-4a9d-a945-58f98a458c9f" />
+
+
+
+      
 
 
 
