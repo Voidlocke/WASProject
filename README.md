@@ -2,7 +2,7 @@
 - Member 1: Nasrun Asri Bin Muhammad (2210479)
 - Member 2: Sofwan Bin Aliza (2224483)
 - Member 3: Muhd Iskandar Bin Yong Fui Min (2214527)
-- Member 4: Muhammad Zarul Hafizzuddin Bin Mohd Zaidi (2215331) #
+- Member 4: Muhammad Zarul Hafizzuddin Bin Mohd Zaidi (2215331)
 - Member 5: Esma Dennis Bin Mohd Adam (2316821)
 
 #  Moonlit Lagoon Hotel - Hotel Management System
