@@ -15,13 +15,17 @@
   Overall, the **Hotel Management System** provides a robust and integrated approach to handling hotel operations. It simplifies complex tasks like managing payments or processing customer bookings and provide more efficient and satisfying guest experience. With its intuitive design and emphasis on data accuracy, the system enhances productivity for hotel staff while offering convenience to customers. This makes it an essential tool for modernizing hotel management processes.
     
 ## Objectives of the Enhancements
-The objectives of this Hotel Management System are: 
+The objectives of enhancments are: 
 
-1. To enable users to manage their profiles and booking details, and provide reviews through the implementation of CRUD functionalities, ensuring all user data is properly stored in the database.
+1. sorg satu
 
-2. To provide hotel administrators with tools for managing room details, monitoring reservations and handling payment records to ensure efficient data processing.
+2. sorg satu
 
-3. To implement review and rating features that allow customers to provide feedback on their stay and access reliable information for future booking decisions.
+3. sorg satu
+
+4. sorg satu
+
+5. To strengthen the security of the Hotel Management System by protecting the database against SQL injection attacks, unauthorized access, and data exposure, while ensuring secure, reliable, and maintainable database interactions.
 
 ## Web Application Security Enhancements
 
@@ -181,19 +185,6 @@ The objectives of this Hotel Management System are:
 
      <img width="1070" height="489" alt="image" src="https://github.com/user-attachments/assets/39c44379-59da-4a9d-a945-58f98a458c9f" />
 
-
-
-      
-
-
-
-
-   
-
-
-
-     
-   
 ## References
 1. Bukit Bintang Accommodation | JW Marriott Hotel Kuala Lumpur. (n.d.). Marriott Bonvoy. https://www.marriott.com/en-us/hotels/kuldt-jw-marriott-hotel-kuala-lumpur/rooms/
 2. The Regency Hotel – Kuala Lumpur. (n.d.). https://theregencyhotel.my/kualalumpur/
