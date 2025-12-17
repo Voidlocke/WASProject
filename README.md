@@ -35,13 +35,13 @@ The objectives of this Hotel Management System are:
 
 5. ### Database Security Principles
 
-    - **Secure Error Handling**
+    - ***Secure Error Handling***
   
-      *What does this principle to the web app:*
+      **What does this principle to the web app:**
 
       Prevents SQL errors (table names, query fragments, column names) from leaking to the user, which attackers can use to craft more precise attacks
 
-      *Files Modified/Created:*
+      **Files Modified/Created:**
 
       bootstrap/app.php was modified
 
