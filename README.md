@@ -1,4 +1,4 @@
-## Group Member
+# Group Member
 - Member 1: Nasrun Asri Bin Muhammad (2210479)
 - Member 2: Sofwan Bin Aliza (2224483)
 - Member 3: Muhd Iskandar Bin Yong Fui Min (2214527)
@@ -7,14 +7,14 @@
 
 #  Moonlit Lagoon Hotel - Hotel Management System
 
-## Introduction of the Web Application
+# Introduction of the Web Application
   A **Hotel Management System** is a web application platform designed to simplify hotel operations and provide an enhanced experience for guests. It enables administrators and customers to efficiently manage various aspects of hotel services, such as user accounts, room allocations, bookings, payments and ratings and reviews. By incorporating CRUD (Create, Read, Update, Delete) functionalities, the system ensures effective data handling, making it a reliable and user-friendly solution for the hospitality industry.
 
   The system’s features cover five main areas: **User Profiles, Bookings, Payments, Reviews & Ratings and Admin Control Panel**. Customers can create and manage user profiles, search for and book their prefered rooms as well as leave reviews for their stays, while administrators can oversee room allocations, track bookings and manage guest details in bookings. These features work together to ensure both convenience for customers and operational efficiency for our hotel staff. For instance, users can view booking histories and receipts, update personal details, or cancel reservations, while admins can adjust room allocation and monitor customer bookings.
    
   Overall, the **Hotel Management System** provides a robust and integrated approach to handling hotel operations. It simplifies complex tasks like managing payments or processing customer bookings and provide more efficient and satisfying guest experience. With its intuitive design and emphasis on data accuracy, the system enhances productivity for hotel staff while offering convenience to customers. This makes it an essential tool for modernizing hotel management processes.
     
-## Objectives of the Enhancements
+# Objectives of the Enhancements
 The objectives of enhancments are: 
 
 1. To protect the application from malicious or invalid user input by enforcing strict validation rules, ensuring data integrity, and preventing common security attacks such as injection and XSS.
@@ -27,25 +27,25 @@ The objectives of enhancments are:
 
 5. To strengthen the security of the Hotel Management System by protecting the database against SQL injection attacks, unauthorized access, and data exposure, while ensuring secure, reliable, and maintainable database interactions.
 
-## Web Application Security Enhancements
+# Web Application Security Enhancements
 
-1. ### Input Validation
-   ### a) Register
-   ### Server-side Validation
-   gambar code
+   ## Input Validation
+   ### 1. Register
+   ### a) Server-side Validation
+   ![Alt text](gambar/codebeforeregisterserver.png)
    #### i) Name (Whitelist + Normalization)
    - For the name input, a whitelist validation approach is applied where only alphabetic characters, spaces, apostrophes ('), hyphens (-), and dots (.) are allowed. Any other symbols or numbers are rejected. In addition, the name is normalized before being stored in the database by trimming extra spaces and converting it to Title Case, where the first letter of each word is uppercase and the remaining letters are lowercase. This ensures consistent and clean user data.
    
    #### ii) Password (Whitelist)
    - The password field uses whitelist validation rules that require a minimum length of 8 characters and enforce the presence of at least one alphabetic character and one numeric digit. This ensures stronger password complexity and reduces the risk of weak or easily guessable passwords.
 
-   ### Client-side Validation
+   ### b) Client-side Validation
    gambar code
    #### i) Name (Whitelist + Input Filtering)
    - For the name input, client-side input filtering is applied using JavaScript (oninput) to restrict the characters that can be typed. Only alphabetic characters, spaces, apostrophes ('), hyphens (-), and dots (.) are allowed, while other characters such as numbers and special symbols are automatically removed. The input is also formatted in real time by collapsing multiple spaces and converting the text to Title Case to improve consistency and user experience before submission.
 
-   ### b) Payment
-   ### Server-side Validation
+   ### 2. Payment
+   ### a) Server-side Validation
    gambar code
    #### i) Cardholder Name (Whitelist + Normalization)
    - A whitelist validation approach is applied to the cardholder name field where only alphabetic characters, spaces, apostrophes ('), and hyphens (-) are allowed. The input is also normalized on the server by converting it to uppercase before processing. This prevents invalid characters and ensures consistent formatting of cardholder names.
@@ -59,7 +59,7 @@ The objectives of enhancments are:
    #### iv) CVV (Whitelist)
    - The CVV field is validated using whitelist rules that require exactly 3 digits. This prevents users from entering longer values or non-numeric input.
 
-   ### Client-side Validation
+   ### b) Client-side Validation
    gambar code
    #### i) Cardholder Name (Whitelist + Input Filtering)
    - Client-side filtering is applied using oninput to restrict characters typed by the user. Only allowed characters remain, and the input is automatically converted to uppercase. This improves usability and prevents accidental invalid input before submission.
@@ -73,13 +73,13 @@ The objectives of enhancments are:
    #### iv) CVV (Whitelist + Length Restriction)
    - Client-side restrictions such as maxlength=3, numeric-only input filtering, and pattern validation ensure the user can only enter 3 digits. Any extra digits are not accepted, reducing errors.
 
-   ### c) Review
-   ### Server-side Validation
+   ### 3. Review
+   ### a) Server-side Validation
    gambar code
    #### i) Review Text (Whitelist)
    - The review text uses whitelist validation to allow only letters, numbers, spaces, and basic punctuation (e.g., . , ! ? ' - ( )). Any other special symbols are rejected.
 
-   ### Client-side Validation
+   ### b) Client-side Validation
    gambar code
    #### i) Review Text (Whitelist + Input Filtering)
    - Client-side filtering is applied on the review textarea using oninput to remove invalid characters immediately as the user types or pastes text.
@@ -94,7 +94,7 @@ gambar ui
 
 5. Reviews & Ratings are for gathering customer feedback on services. After their stay, customers can create reviews and ratings for the rooms, sharing their experiences with future guests. These reviews are displayed for all to see on the booking pages, helping others make informed decisions. Customers also have the option to update their reviews within a specified timeframe, providing them with the flexibility to revise their feedback if needed. Admins monitor and delete inappropriate or spammy reviews to ensure that only valid, helpful feedback is visible.
 
-6. ### Database Security Principles
+6. ## Database Security Principles
 
     - ***Secure Error Handling***
   
