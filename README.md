@@ -56,9 +56,11 @@ The objectives of enhancments are:
 
    ### c) User Interface (UI)
    ![Alt text](gambar/uibeforeregister.png)
+   
    Figure 5: User interface in register page before enhancement.
 
    ![Alt text](gambar/uiafterregister.png)
+   
    Figure 6: User interface in register page after enhancement.
 
    ### 2. Payment
