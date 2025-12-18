@@ -146,7 +146,7 @@ The objectives of enhancments are:
 
 5. Reviews & Ratings are for gathering customer feedback on services. After their stay, customers can create reviews and ratings for the rooms, sharing their experiences with future guests. These reviews are displayed for all to see on the booking pages, helping others make informed decisions. Customers also have the option to update their reviews within a specified timeframe, providing them with the flexibility to revise their feedback if needed. Admins monitor and delete inappropriate or spammy reviews to ensure that only valid, helpful feedback is visible.
 
-6. ## Database Security Principles
+   ## Database Security Principles
 
     - ***Secure Error Handling***
   
