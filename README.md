@@ -296,6 +296,24 @@ The objectives of enhancments are:
 
      <img width="1070" height="489" alt="image" src="https://github.com/user-attachments/assets/39c44379-59da-4a9d-a945-58f98a458c9f" />
 
+   - ***Least Privilege***
+    
+       **What does this principle to the web app:**
+
+       This principle limits database access by ensuring the web application uses a non-root database account with only necessary permissions. It reduces the risk and impact of attacks by preventing unauthorized schema changes, user management, and database-wide modifications, even if the application is compromised.
+
+       **Files Modified/Created:**
+
+       .env.example
+
+       Before modified,
+
+       <img width="318" height="157" alt="image" src="https://github.com/user-attachments/assets/e1a04ec4-3a29-4045-a017-271e92ed4658" />
+
+       After modified,
+
+       <img width="396" height="169" alt="image" src="https://github.com/user-attachments/assets/3d9c5031-d604-4fdf-9723-aa6d22c8a666" />
+
 ## References
 1. Bukit Bintang Accommodation | JW Marriott Hotel Kuala Lumpur. (n.d.). Marriott Bonvoy. https://www.marriott.com/en-us/hotels/kuldt-jw-marriott-hotel-kuala-lumpur/rooms/
 2. The Regency Hotel – Kuala Lumpur. (n.d.). https://theregencyhotel.my/kualalumpur/
