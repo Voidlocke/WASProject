@@ -213,4 +213,49 @@ class BookingController extends Controller
 
         return redirect()->route('admin.index')->with('success', 'Booking deleted successfully.');
     }
+
+public function downloadFile($filename)
+{
+    // Ensure user is authenticated
+    if (!Auth::check()) {
+        abort(403, 'Unauthorized access');
+    }
+
+    // Sanitize the filename to prevent directory traversal (e.g., ../../etc/passwd)
+    $filename = basename($filename);  // This removes any directory traversal attempts
+
+    // Define private file path
+    $filePath = 'private/' . $filename;
+
+    // Check if file exists in private storage
+    if (!Storage::exists($filePath)) {
+        abort(404, 'File not found');
+    }
+
+    // Secure file download (no direct URL access)
+    return Storage::download($filePath);
+}
+
+/*    public function rooms(Request $request)
+{
+    $query = DB::table('rooms');
+    //$query = Room::query(); // Assuming you have a Room model
+
+      // Apply filters if provided
+      if ($request->has('room_type') && $request->room_type != '') {
+        $query->where('type', $request->room_type);
+    }
+     // Filter by guest count if provided
+    if ($request->has('guest_count') && $request->guest_count != '') {
+        $query->where('maxperson', '>=', $request->guest_count);
+    }
+
+    $rooms = $query->get(); //Retrieve filtered rooms
+    //$rooms = Room::all(); // Fetch all room data
+
+    // Check if the result is empty and pass a message to the view
+    $message = $rooms->isEmpty() ? 'No rooms found for the given criteria.' : null;
+
+    return view('rooms', compact('rooms', 'message'));
+}*/
 }

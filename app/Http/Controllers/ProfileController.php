@@ -48,9 +48,11 @@ public function updateProfilePhoto(Request $request)
         'profile_photo' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
     ]);
 
-    // Store the file in the public/images directory
-    $fileName = time() . '.' . $request->file('profile_photo')->getClientOriginalExtension();
-    $path = $request->file('profile_photo')->move(public_path('images'), $fileName);
+    // Sanitize the file name to prevent directory traversal
+    $fileName = time() . '-' . preg_replace('/[^a-zA-Z0-9-_\.]/', '', $request->file('profile_photo')->getClientOriginalName());
+
+    // Store the file securely in storage (outside the public directory)
+    $path = $request->file('profile_photo')->storeAs('profile_photos', $fileName);
 
     // Save the path to the user's profile
     $user = Auth::user();

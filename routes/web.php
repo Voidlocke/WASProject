@@ -50,6 +50,20 @@ Route::get('/login', function () {
 |--------------------------------------------------------------------------
 */
 
+Route::get('/admin/login', [AdminLoginController::class, 'showLoginForm'])->name('admin.login');
+
+Route::middleware([
+    'auth:sanctum',
+    config('jetstream.auth_session'),
+    'verified',
+])->group(function () {
+    Route::get('/dashboard', function () {
+        return view('dashboard');
+    })->name('dashboard');
+});
+
+Route::get('/reviews', [ReviewController::class, 'index'])->name('reviews.index');
+
 Route::middleware(['auth'])->group(function () {
 
     // Bookings (CRUD)
@@ -110,6 +124,20 @@ Route::middleware(['isAdmin'])->prefix('admin')->group(function () {
 | Debug (OPTIONAL – REMOVE BEFORE SUBMISSION)
 |--------------------------------------------------------------------------
 */
+
+//get room data from database for rooms page
+//Route::get('/rooms', [BookingController::class, 'rooms'])->name('rooms');
+Route::get('/rooms', [RoomController::class, 'index'])->name('rooms');
+
+Route::post('/bookings', [BookingController::class, 'store'])->name('bookings.store');
+Route::get('payment', [PaymentController::class, 'index'])->name('payment');
+
+Route::middleware(['auth'])->get(
+    '/booking/download/{filename}',
+    [BookingController::class, 'downloadFile']
+)->name('booking.download');
+
+
 
 // Route::get('/admin/check', function () {
 //     return [
