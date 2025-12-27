@@ -19,7 +19,7 @@ The objectives of enhancments are:
 
 1. To protect the application from malicious or invalid user input by enforcing strict validation rules, ensuring data integrity, and preventing common security attacks such as injection and XSS.
 
-2. sorg satu
+2. To secure the Hotel Management System by implementing robust authentication and authorization mechanisms that verify user identity, control access to resources, and ensure users can only perform actions on their own data, preventing unauthorized access and privilege escalation. 
 
 3. sorg satu
 
@@ -139,14 +139,206 @@ The objectives of enhancments are:
 
    ![Alt text](gambar/uiafterreview.png)
    Figure 18: User interface in reviews page after enhancement.
+
    
+   ## Authentication Enhancements
    
+   ### 1. Admin Authentication Enhanced
+   
+   #### Before Enhancement:
+   <img width="900" alt="image" src="gambar/beforeadminlogin.png" />
 
-3. Bookings system is used to handle customer reservations. Customers can create bookings by selecting their preferred dates, room type and the number of guests. Once a booking is made, customers can read and review the booking details, including booking status and dates. Admins have the ability to see and manage all bookings. Customers can update their reservations by changing the dates or the number of guests before payment. The delete feature allows customers to cancel their bookings.
+   Figure X: AdminLoginController.php before enhancement - basic authentication only.
 
-4. Payments system manages all aspects of booking payments. Upon booking confirmation, customers will enter their bank details, including the name on the bank card, the card number, expiration date and CVV, to process the payment. Once payment is made, customers will receive receipts for their transactions, and admins can track payments and their statuses to ensure all financial records are up to date. Customers can view their payment receipts to mark payments as successful. In case of cancellations before payment confirmation, customers can cancel their payments, and admins can delete any invalid transactions that may arise.
+   #### After Enhancement:
+   <img width="900" alt="image" src="gambar/afteradminlogin.png" />
 
-5. Reviews & Ratings are for gathering customer feedback on services. After their stay, customers can create reviews and ratings for the rooms, sharing their experiences with future guests. These reviews are displayed for all to see on the booking pages, helping others make informed decisions. Customers also have the option to update their reviews within a specified timeframe, providing them with the flexibility to revise their feedback if needed. Admins monitor and delete inappropriate or spammy reviews to ensure that only valid, helpful feedback is visible.
+   Figure Y: AdminLoginController.php after enhancement - dual verification with guard and session.
+   
+   **Vulnerability Fixed:** Admin authentication was limited to Laravel's auth guard only. Enhanced with dual verification (both auth guard and manual session storage) to ensure reliable admin authentication and prevent session-related security issues.
+   
+   ---
+   
+   ### 2. Admin Route Protection (IsAdmin Middleware)
+   
+   #### Middleware Implementation:
+   <img width="900" alt="image" src="gambar/afterismiddleware.png" />
+
+   Figure Z: IsAdmin middleware created to protect admin-only routes.
+   
+   **Vulnerability Fixed:** Admin dashboard (`/admin`) was accessible to anyone by directly typing the URL. Created IsAdmin middleware that verifies authentication via both guard and session, redirecting unauthorized users to login page.
+   
+   **Exploitation Example:** Before fix, any user could access `http://localhost:8000/admin` and view/modify all bookings without admin credentials.
+   
+   ---
+   
+   ### 3. Protected Route Structure
+   
+   #### Before Enhancement:
+   <img width="900" alt="image" src="gambar/beforeroutes.png" />
+
+   Figure A: routes/web.php before enhancement - unprotected admin routes.
+
+   #### After Enhancement:
+   <img width="900" alt="image" src="gambar/afterroutes.png" />
+
+   Figure B: routes/web.php after enhancement - admin routes protected with IsAdmin middleware.
+   
+   **Vulnerability Fixed:** All admin routes were publicly accessible. Now grouped under `/admin` prefix with `isAdmin` middleware protection, ensuring only authenticated admins can access administrative functions.
+   
+   ---
+   
+   ### 4. Middleware Registration
+   
+   #### Before Enhancement:
+   <img width="900" alt="image" src="gambar/beforebootstrap.png" />
+
+   Figure C: bootstrap/app.php before enhancement - no middleware registered.
+
+   #### After Enhancement:
+   <img width="900" alt="image" src="gambar/afterbootstrap.png" />
+
+   Figure D: bootstrap/app.php after enhancement - IsAdmin middleware registered.
+   
+   **Implementation:** Registered IsAdmin middleware alias in bootstrap/app.php to enable route protection across the application.
+   
+   ---
+   
+   ## Authorization Enhancements
+   
+   ### 5. Booking Authorization - Create
+   
+   #### Before Enhancement:
+   <img width="900" alt="image" src="gambar/beforebookingcontroller.png" />
+
+   Figure E: BookingController.php store method before enhancement - no authorization check.
+
+   #### After Enhancement:
+   <img width="900" alt="image" src="gambar/afterbookingcontroller.png" />
+
+   Figure F: BookingController.php store method after enhancement - authorization check added.
+   
+   **Vulnerability Fixed:** No verification that authenticated users have permission to create bookings. Added `$this->authorize('create', Booking::class)` to enforce authorization policy before booking creation.
+   
+   ---
+   
+   ### 6. Booking Authorization - Delete
+   
+   #### Before Enhancement:
+   <img width="900" alt="image" src="gambar/beforeprofilecontroller.png" />
+
+   Figure G: ProfileController.php cancelBooking method before enhancement - no ownership check.
+
+   #### After Enhancement:
+   <img width="900" alt="image" src="gambar/afterprofilecontroller.png" />
+
+   Figure H: ProfileController.php cancelBooking method after enhancement - authorization check added.
+   
+   **Vulnerability Fixed:** Users could delete ANY booking by manipulating booking_id in the URL or browser console. Added `$this->authorize('delete', $bookings)` to verify ownership before deletion.
+   
+   **Exploitation Example:** Before fix, User A could cancel User B's booking by sending `DELETE /cancel-booking/5` even if booking 5 belongs to User B.
+   
+   ---
+   
+   ### 7. BookingPolicy Rules
+
+   <img width="900" alt="image" src="gambar/afterbookingpolicy.png" />
+
+   Figure I: BookingPolicy.php - authorization rules for bookings.
+   
+   **Policy Rules Implemented:**
+   - Users can only view/update/delete their own bookings (`user_id` ownership check)
+   - Bookings cannot be modified after check-in date or if status is 'completed'
+   - Time-based restrictions prevent unauthorized modifications
+   
+   ---
+   
+   ### 8. Review Authorization - Create
+   
+   #### Before Enhancement:
+   <img width="900" alt="image" src="gambar/beforereviewcontrollerstore.png" />
+
+   Figure J: ReviewController.php store method before enhancement - no authorization check.
+
+   #### After Enhancement:
+   <img width="900" alt="image" src="gambar/afterreviewcontrollerstore.png" />
+
+   Figure K: ReviewController.php store method after enhancement - authorization check added.
+   
+   **Vulnerability Fixed:** Added `$this->authorize('create', Review::class)` to enforce authorization before review creation.
+   
+   ---
+   
+   ### 9. Review Authorization - Update
+   
+   #### Before Enhancement:
+   <img width="900" alt="image" src="gambar/beforereviewcontrollerupdate.png" />
+
+   Figure L: ReviewController.php update method before enhancement - no ownership check.
+
+   #### After Enhancement:
+   <img width="900" alt="image" src="gambar/afterreviewcontrollerupdate.png" />
+
+   Figure M: ReviewController.php update method after enhancement - authorization check added.
+   
+   **Vulnerability Fixed:** Users could edit ANY review by changing the review ID in URL. Added `$this->authorize('update', $review)` to verify ownership and enforce 30-day edit limit.
+   
+   **Exploitation Example:** Before fix, User A could edit User B's negative review by accessing `PUT /reviews/10` even if review 10 belongs to User B.
+   
+   ---
+   
+   ### 10. Review Authorization - Delete
+   
+   #### Before Enhancement:
+   <img width="900" alt="image" src="gambar/beforereviewcontrollerdestroy.png" />
+
+   Figure N: ReviewController.php destroy method before enhancement - no ownership check.
+
+   #### After Enhancement:
+   <img width="900" alt="image" src="gambar/afterreviewcontrollerdestroy.png" />
+
+   Figure O: ReviewController.php destroy method after enhancement - authorization check added.
+   
+   **Vulnerability Fixed:** Users could delete ANY review. Added `$this->authorize('delete', $review)` to verify ownership before deletion.
+   
+   ---
+   
+   ### 11. ReviewPolicy Rules
+
+   <img width="900" alt="image" src="gambar/aftereviewpolicy.png" />
+
+   Figure P: ReviewPolicy.php - authorization rules for reviews.
+   
+   **Policy Rules Implemented:**
+   - Users can only update their own reviews within 30 days of posting (`user_id` ownership + time restriction)
+   - Users can only delete their own reviews (`user_id` ownership check)
+   - Public can view all reviews (no authentication required for viewing)
+   
+   ---
+   
+   ## Summary
+   
+   ### Files Created:
+   1. `app/Http/Middleware/IsAdmin.php` - Admin route protection
+   2. `app/Policies/BookingPolicy.php` - Booking authorization rules
+   3. `app/Policies/ReviewPolicy.php` - Review authorization rules
+   
+   ### Files Modified:
+   1. `app/Http/Controllers/AdminLoginController.php` - Enhanced authentication
+   2. `app/Http/Controllers/BookingController.php` - Added authorization checks
+   3. `app/Http/Controllers/ReviewController.php` - Added authorization checks
+   4. `app/Http/Controllers/ProfileController.php` - Added authorization checks
+   5. `app/Models/Admin.php` - Fixed authentication identifier for session storage
+   6. `bootstrap/app.php` - Registered IsAdmin middleware
+   7. `routes/web.php` - Protected admin routes with middleware
+   
+   ### Security Impact:
+   - Prevented unauthorized access to admin dashboard
+   - Prevented users from modifying other users' bookings/reviews (IDOR attack prevention)
+   - Added time-based restrictions (30-day edit limit, no post-check-in modifications)
+   - Implemented dual authentication for admin access
+   - Enforced ownership verification before all CRUD operations
+   
 
    ## Database Security Principles
 
