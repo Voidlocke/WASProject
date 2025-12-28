@@ -467,7 +467,7 @@ The objectives of enhancments are:
 
    ## Database Security Principles
 
-   - ***Secure Error Handling***
+   - ### A) Secure Error Handling
      
       **What does this principle to the web app:**
 
@@ -510,45 +510,65 @@ The objectives of enhancments are:
 
      app/Http/Controllers/BookingController.php
 
-     Before modified,
+     Before enhancement,
 
      <img width="766" height="249" alt="image" src="https://github.com/user-attachments/assets/8cd5f9b9-391c-44e5-afd1-3202cbadd9f9" />
 
-     After nodified,
+     Figure X: BookingController.php before enhancement
+
+     After enhancement,
 
      <img width="662" height="48" alt="image" src="https://github.com/user-attachments/assets/5ad798a0-f1fb-4325-afb5-405f4f06a746" />
 
+     Figure X: BookingController.php after enhancment - one use statement was added
+
      <img width="959" height="465" alt="image" src="https://github.com/user-attachments/assets/bd672906-21fe-43b9-bcaa-b5ae996d54ee" />
+
+     Figure X: BookingController.php after enhancement
 
      New file app/Http/Requests/BookingRequest.php also was created to support the modified file
 
      <img width="931" height="494" alt="image" src="https://github.com/user-attachments/assets/54515825-71fe-4994-a096-e36c11e70337" />
 
+     Figure X: BookingRequest.php was created to support the enhanced file
+
      app/Http/Controllers/RoomController.php
 
-     Before modified,
+     Before enhancement,
 
      <img width="699" height="128" alt="image" src="https://github.com/user-attachments/assets/ee7c0149-db90-4b57-98a2-4c63b205b05c" />
 
-     After modified,
+     Figure X: RoomController.php before enhancement
+
+     After enhancement,
 
      <img width="1011" height="118" alt="image" src="https://github.com/user-attachments/assets/57bf718d-42a5-4fcd-a2c5-3de01eca2f26" />
 
+     Figure X: RoomController.php after enhancement
+
      app/Http/Controllers/PaymentController.php
 
-     Before modified,
+     Before enhancement,
 
      <img width="680" height="193" alt="image" src="https://github.com/user-attachments/assets/8c69c8c9-bdc4-48cd-b46c-4bd80294846b" />
 
-     After modified,
+     Figure X: PaymentController.php before enhancement
+
+     After enhancement,
 
      <img width="569" height="53" alt="image" src="https://github.com/user-attachments/assets/4c61d2a1-80b5-476b-81bb-fe8800269182" />
 
+     Figure X: PaymentController.php after enhancement - one use statement was added
+
      <img width="801" height="222" alt="image" src="https://github.com/user-attachments/assets/d71161a4-629c-4307-b50f-251d75300297" />
+
+     Figure X: PaymentController.php after enhancement
 
      New file app/Http/Requests/StorePaymentRequest.php also was created to support the modified file
 
      <img width="833" height="551" alt="image" src="https://github.com/user-attachments/assets/4e826d2d-54e3-4785-8231-28a539ad953a" />
+
+     Figure X: StorePaymentRequest.php also was created to support the enhanced file
 
    - ***Stored Procedures***
 
@@ -560,19 +580,27 @@ The objectives of enhancments are:
 
      app/Http/Controllers/BookingController.php
 
-     Before modified,
+     Before enhancement,
 
      <img width="756" height="314" alt="image" src="https://github.com/user-attachments/assets/6f44cdb5-8cb6-4794-8260-61f969db70bf" />
 
-     After modified,
+     Figure X: BookingController.php before enhancement
+
+     After enhancement,
 
      <img width="1125" height="520" alt="image" src="https://github.com/user-attachments/assets/623bf9cc-fbd6-4906-93bd-3f6851ca1b4c" />
+
+     Figure X: BookingController.php after enhancement
 
      New file database\migrations\2025_12_16_093152_create_stored_procedures.php also was created to support the modified file
 
      <img width="946" height="838" alt="image" src="https://github.com/user-attachments/assets/c0720781-dfa8-4420-91cc-d05795b55f2f" />
 
+     Figure X: 2025_12_16_093152_create_stored_procedures.php  was created to support the enhanced file
+
      <img width="769" height="683" alt="image" src="https://github.com/user-attachments/assets/a2a0b0c8-b3e3-4af5-9229-c4c83ee43c42" />
+
+     Figure X: 2025_12_16_093152_create_stored_procedures.php  was created to support the enhanced file
 
   - ***Encrypted Database Connections (TLS/SSL)***
 
@@ -584,23 +612,31 @@ The objectives of enhancments are:
 
      .env.example
 
-     Before modified,
+     Before enhancement,
 
      <img width="543" height="99" alt="image" src="https://github.com/user-attachments/assets/6f24b104-6056-4628-9836-5516cfd86a27" />
+
+     Figure X: .env.example before enhancement
 
      After modified,
 
      <img width="636" height="121" alt="image" src="https://github.com/user-attachments/assets/bdc254cc-9f47-4aeb-a1f3-2515acd36c42" />
 
+     Figure X: .env.example after enhancement
+
      config/database.php
 
-     Before modified,
+     Before enhancement,
 
      <img width="894" height="481" alt="image" src="https://github.com/user-attachments/assets/05a04dcf-998d-426b-a916-d94b45dde01a" />
 
-     After modifed,
+     Figure X: database.php before enhancement
+
+     After enhancement,
 
      <img width="1009" height="502" alt="image" src="https://github.com/user-attachments/assets/2e846717-c1a7-432a-8fc8-5618d727ce4c" />
+
+     Figure X: database.php after enhancement
 
      Note of usage: Encrypted database connections are configured at the application level and enabled in production environments where the database is accessed over a network. For local development using XAMPP, SSL is not enforced as the database runs on the same host. TLS certificates (ca.pem) are provided by hosting provider (production) and cloud DB services.
 
@@ -615,13 +651,17 @@ The objectives of enhancments are:
 
      app/Http/Controllers/RoomController.php
 
-     Before modified,
+     Before enhancement,
 
      <img width="685" height="181" alt="image" src="https://github.com/user-attachments/assets/c5582563-7af9-4cd2-bdde-9181e696d22e" />
+
+     Figure X: RoomController.php before enhancement
   
-     After modified,
+     After enhancement,
 
      <img width="1070" height="489" alt="image" src="https://github.com/user-attachments/assets/39c44379-59da-4a9d-a945-58f98a458c9f" />
+
+     Figure X: RoomController.php after enhancement
 
    - ***Least Privilege***
     
@@ -633,13 +673,17 @@ The objectives of enhancments are:
 
        .env.example
 
-       Before modified,
+       Before enhancement,
 
        <img width="318" height="157" alt="image" src="https://github.com/user-attachments/assets/e1a04ec4-3a29-4045-a017-271e92ed4658" />
 
-       After modified,
+       Figure X: .env.example before enhancement
+
+       After enhancement,
 
        <img width="396" height="169" alt="image" src="https://github.com/user-attachments/assets/3d9c5031-d604-4fdf-9723-aa6d22c8a666" />
+
+       Figure X: .env.example after enhancement
 
 ## References
 1. Bukit Bintang Accommodation | JW Marriott Hotel Kuala Lumpur. (n.d.). Marriott Bonvoy. https://www.marriott.com/en-us/hotels/kuldt-jw-marriott-hotel-kuala-lumpur/rooms/
