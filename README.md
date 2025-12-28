@@ -467,7 +467,7 @@ The objectives of enhancments are:
 
    ## Database Security Principles
 
-   - ### A) Secure Error Handling
+   - ### 1) Secure Error Handling
      
      **What does this principle to the web app:**
 
@@ -500,7 +500,7 @@ The objectives of enhancments are:
       Figure X: 500.blade.php was created to support the enhanced file
 
 
-   - ### B) Input Validation (Whitelisting)
+   - ### 2) Input Validation (Whitelisting)
 
       **What does this principle to the web app:**
 
@@ -570,7 +570,7 @@ The objectives of enhancments are:
 
      Figure X: StorePaymentRequest.php also was created to support the enhanced file
 
-   - ### C) Stored Procedures
+   - ### 3) Stored Procedures
 
       **What does this principle to the web app:**
 
@@ -602,7 +602,7 @@ The objectives of enhancments are:
 
      Figure X: 2025_12_16_093152_create_stored_procedures.php  was created to support the enhanced file
 
-  - ### D) Encrypted Database Connections (TLS/SSL)
+  - ### 4) Encrypted Database Connections (TLS/SSL)
 
       **What does this principle to the web app:**
 
@@ -641,7 +641,7 @@ The objectives of enhancments are:
      Note of usage: Encrypted database connections are configured at the application level and enabled in production environments where the database is accessed over a network. For local development using XAMPP, SSL is not enforced as the database runs on the same host. TLS certificates (ca.pem) are provided by hosting provider (production) and cloud DB services.
 
 
-   - ### E) Restrict User-Controlled SQL Components
+   - ### 5) Restrict User-Controlled SQL Components
   
       **What does this principle to the web app:**
 
@@ -663,7 +663,7 @@ The objectives of enhancments are:
 
      Figure X: RoomController.php after enhancement
 
-   - ### F) Least Privilege
+   - ### 6) Least Privilege
     
        **What does this principle to the web app:**
 
