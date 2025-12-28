@@ -377,7 +377,7 @@ The objectives of enhancments are:
 
    #### After Enhancement:
 
-   <img width="900" alt="image" src="gambar/gambar/ORMafter.png" />
+   <img width="900" alt="image" src="gambar/ORMafter.png" />
 
    Figure X: ORM enforces parameter binding which prevents Prevents injection of malicious input and while also reduces chances of tainted data being rendered later.
 
@@ -387,13 +387,13 @@ The objectives of enhancments are:
 
    #### Before Enhancement:
 
-   <img width="900" alt="image" src="gambar/gambar/Controlledlogicbefore.png" />
+   <img width="900" alt="image" src="gambar/Controlledlogicbefore.png" />
 
    Figure X: No checks on sensitive state changes. CSRF attack could silently modify booking relationships.
 
    #### After Enhancement:
 
-   <img width="900" alt="image" src="gambar/gambar/Controlledlogicafter.png" />
+   <img width="900" alt="image" src="gambar/Controlledlogicafter.png" />
 
    Figure X: Limits the effect of forged requests and ensures state changes follow valid business logic. This helps prevent silent data manipulation through CSRF
 
