@@ -401,29 +401,30 @@ The objectives of enhancments are:
 
    ## Database Security Principles
 
-    - ***Secure Error Handling***
-  
+   - ***Secure Error Handling***
+     
       **What does this principle to the web app:**
 
-      Prevents SQL errors (table names, query fragments, column names) from leaking to the user, which attackers can use to craft more precise attacks
+     Prevents SQL errors (table names, query fragments, column names) from leaking to the user, which attackers can use to craft more precise attacks
 
-      **Files Modified/Created:**
+     **Files Modified/Created:**
 
-      bootstrap/app.php was modified
+     bootstrap/app.php was modified
 
-      Before modified,
+     Before modified,
 
-      <img width="860" height="96" alt="image" src="https://github.com/user-attachments/assets/6c2c48ea-0c4f-43e6-a749-a4486a8b72fb" />,
+     <img width="860" height="96" alt="image" src="https://github.com/user-attachments/assets/6c2c48ea-0c4f-43e6-a749-a4486a8b72fb" />
+  
+     After modified,
 
-      After modified,
+     <img width="496" height="43" alt="image" src="https://github.com/user-attachments/assets/b0670aa8-d6ff-44c4-82fe-76f66fa25f86" />
 
-      <img width="496" height="43" alt="image" src="https://github.com/user-attachments/assets/b0670aa8-d6ff-44c4-82fe-76f66fa25f86" />
+     <img width="871" height="259" alt="image" src="https://github.com/user-attachments/assets/9ef63977-b173-4fc8-b60a-de46b47dc367" />
 
-      <img width="871" height="259" alt="image" src="https://github.com/user-attachments/assets/9ef63977-b173-4fc8-b60a-de46b47dc367" />
+     New file resources/views/errors/500.blade.php also was created to support the modified file
 
-      New file resources/views/errors/500.blade.php also was created to support the modified file
+     <img width="1444" height="373" alt="image" src="https://github.com/user-attachments/assets/39843b46-093a-4d3b-9540-e572a562d2a1" />
 
-      <img width="1444" height="373" alt="image" src="https://github.com/user-attachments/assets/39843b46-093a-4d3b-9540-e572a562d2a1" />
 
    - ***Input Validation (Whitelisting)***
 
@@ -499,35 +500,36 @@ The objectives of enhancments are:
 
      <img width="769" height="683" alt="image" src="https://github.com/user-attachments/assets/a2a0b0c8-b3e3-4af5-9229-c4c83ee43c42" />
 
-    - ***Encrypted Database Connections (TLS/SSL)***
+  - ***Encrypted Database Connections (TLS/SSL)***
 
       **What does this principle to the web app:**
 
-      This principle ensures that data transmitted between the web application server and the databse server is encrypted. Sensetive information (credentials, user data, bookings, payments) cannot be intecepted (man-in-the-middle attack) and read in plain text on the network. This is achieved by enabling TLS/SSL encryption for database connections.
+     This principle ensures that data transmitted between the web application server and the databse server is encrypted. Sensetive information (credentials, user data, bookings, payments) cannot be intecepted (man-in-the-middle attack) and read in plain text on the network. This is achieved by enabling TLS/SSL encryption for database connections.
 
-      **Files Modified/Created:**
+     **Files Modified/Created:**
 
-      .env.example
+     .env.example
 
-      Before modified,
+     Before modified,
 
-      <img width="543" height="99" alt="image" src="https://github.com/user-attachments/assets/6f24b104-6056-4628-9836-5516cfd86a27" />
+     <img width="543" height="99" alt="image" src="https://github.com/user-attachments/assets/6f24b104-6056-4628-9836-5516cfd86a27" />
 
-      After modified,
+     After modified,
 
-      <img width="636" height="121" alt="image" src="https://github.com/user-attachments/assets/bdc254cc-9f47-4aeb-a1f3-2515acd36c42" />
+     <img width="636" height="121" alt="image" src="https://github.com/user-attachments/assets/bdc254cc-9f47-4aeb-a1f3-2515acd36c42" />
 
-      config/database.php
+     config/database.php
 
-      Before modified,
+     Before modified,
 
-      <img width="894" height="481" alt="image" src="https://github.com/user-attachments/assets/05a04dcf-998d-426b-a916-d94b45dde01a" />
+     <img width="894" height="481" alt="image" src="https://github.com/user-attachments/assets/05a04dcf-998d-426b-a916-d94b45dde01a" />
 
-      After modifed,
+     After modifed,
 
-      <img width="1009" height="502" alt="image" src="https://github.com/user-attachments/assets/2e846717-c1a7-432a-8fc8-5618d727ce4c" />
+     <img width="1009" height="502" alt="image" src="https://github.com/user-attachments/assets/2e846717-c1a7-432a-8fc8-5618d727ce4c" />
 
-      Note of usage: Encrypted database connections are configured at the application level and enabled in production environments where the database is accessed over a network. For local development using XAMPP, SSL is not enforced as the database runs on the same host. TLS certificates (ca.pem) are provided by hosting provider (production) and cloud DB services.
+     Note of usage: Encrypted database connections are configured at the application level and enabled in production environments where the database is accessed over a network. For local development using XAMPP, SSL is not enforced as the database runs on the same host. TLS certificates (ca.pem) are provided by hosting provider (production) and cloud DB services.
+
 
    - ***Restrict User-Controlled SQL Components***
   
