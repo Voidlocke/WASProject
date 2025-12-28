@@ -845,7 +845,7 @@ This part of the code makes it so that Review are tied to actual bookings. It al
 
      **Security Fix:** Storing sensitive data in environment variables ensures that sensitive information is never exposed in the code repository, reducing the risk of accidental leaks.
 
-          ### 5. **Authorization and Access Control**
+     ### 5. **Authorization and Access Control**
 
      ***Before enhancement***,
 
