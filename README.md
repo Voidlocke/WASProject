@@ -480,20 +480,24 @@ The objectives of enhancments are:
      Before enhancement,
 
      <img width="860" height="96" alt="image" src="https://github.com/user-attachments/assets/6c2c48ea-0c4f-43e6-a749-a4486a8b72fb" />
+
      Figure X: app.php before enhancement
   
      After enhancement,
 
      <img width="496" height="43" alt="image" src="https://github.com/user-attachments/assets/b0670aa8-d6ff-44c4-82fe-76f66fa25f86" />
+
      Figure X: app.php after enhancement - several use statement was added
 
      <img width="871" height="259" alt="image" src="https://github.com/user-attachments/assets/9ef63977-b173-4fc8-b60a-de46b47dc367" />
+
      Figure X: app.php after enhancement
 
      New file resources/views/errors/500.blade.php also was created to support the modified file
 
      <img width="1444" height="373" alt="image" src="https://github.com/user-attachments/assets/39843b46-093a-4d3b-9540-e572a562d2a1" />
-     Figure X: 500.blade.php was created to support the enhanced file
+
+      Figure X: 500.blade.php was created to support the enhanced file
 
 
    - ***Input Validation (Whitelisting)***
