@@ -433,7 +433,7 @@ The objectives of enhancments are:
 
    #### After Enhancement: 
 
-   <img width="900" alt="image" src="gambar/Sensitiveinfoaafter.png" />
+   <img width="900" alt="image" src="gambar/Sensitiveinfoafter.png" />
 
    <img width="900" alt="image" src="gambar/Paymentcalcafter.png" />
 
@@ -478,12 +478,40 @@ The objectives of enhancments are:
    #### After Enhancement:
    
    <img width="900" alt="image" src="gambar/codeafterreviewserver.png" />
-
-   ### a) Strict Input Validation with Character Whitelisting
       
 Figure X: Changes were made to block HTML tags, script injections, and event handlers by enforcing a whitelist-based validation. This prevents malicious payloads from entering the database. 
      
 **Fix Achieved:** Eliminates stored and reflected XSS via review text.
+
+### b) Server-Side Sanitization Using stripTags()
+
+#### Before Enhancement:
+
+<img width="900" alt="image" src="gambar/Serversidesanitationbefore.png" />
+
+Figure X: The review text are stored exactly as submitted. This makes XSS attacks easier because HTML or script tags presissted in database
+
+#### After Enhancement:
+
+<img width="900" alt="image" src="gambar/Serversidesanitationafter.png" />
+
+Figure X: Removed any HTML tags so that it can act as a second layer of defence. This also means protection against encoding to bypass attempts
+
+**Fix Achieved:** Ensures malicious scripts cannot execute when reviews are displayed.
+
+### c) Secure Review-Booking Association
+
+#### Before Enhancement:
+
+<img width="900" alt="image" src="gambar/Securereviewbefore.png" />
+
+Figure X: This part of code has a weak integrity checks making it easier to tamper with the data. Furthermore, this part of the code is loosely associated with the bookings.
+
+<img width="900" alt="image" src="gambar/Serversidesanitationafter.png" />
+
+Figure X: This part of the code makes it so that Review are tied to actual bookings. It also prevents CSRF attacks because it cannot inject fake reviews. This will results in the prevention of spam and impersonation
+
+**Fix Achieved:** Only legitimate users with valid bookings can submit reviews.
 
 
    ## Database Security Principles
