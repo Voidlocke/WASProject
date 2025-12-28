@@ -23,7 +23,7 @@ The objectives of enhancments are:
 
 3. To enhance the security of the Hotel Management System by preventing Cross-Site Scripting (XSS) and Cross-Site Request Forgery (CSRF) attacks through appropriate escaping and sanitizing user-generated content, enforcing secure output rendering, and implementing CSRF protection mechanisms to ensure that all state-changing requests originate from legitimate and authenticated users.
 
-4. sorg satu
+4. To ensures that hotel booking documents and customer-related files are securely stored and accessed only by authorized users. Also we enhance the system to reduce the risk of unauthorized access, data leakage, and exploitation within the Hotel Management System.
 
 5. To strengthen the security of the Hotel Management System by protecting the database against SQL injection attacks, unauthorized access, and data exposure, while ensuring secure, reliable, and maintainable database interactions.
 
