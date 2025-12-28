@@ -780,6 +780,163 @@ This part of the code makes it so that Review are tied to actual bookings. It al
 
        Figure X: .env.example after enhancement
 
+     ## File Security Principle
+     ### 1. **File Handling and Download Security**
+     
+     ***Before enhancement***,
+
+     <img width="877" height="175" alt="Screenshot 2025-12-28 233411" src="https://github.com/user-attachments/assets/e028af4a-0f97-4613-903a-e929e58f0907" />
+
+     Figure X: file downloads were handled without proper security measures. There was no sanitation for the filename, allowing potential **directory traversal attacks**.
+
+     ***After enhancement***,
+
+     <img width="871" height="510" alt="Screenshot 2025-12-28 233927" src="https://github.com/user-attachments/assets/16222b31-23f8-4082-8a91-538da4385f64" />
+
+     Figure X: The filename is sanitized using basename() to prevent directory traversal and ensure the file path is safe.
+
+     **Enhancement:** The filename is now sanitized to remove any directory traversal attempts (../). This ensures that only the actual file name is passed to the storage system.
+
+     **Security Fix:** This prevents unauthorized access to files outside the intended directory, protecting sensitive files from potential exploitation.
+
+     ### 2. **Sanitization of Profile Photo Uploads**
+
+     ***Before enhancement***,
+
+     <img width="777" height="434" alt="Screenshot 2025-12-28 235441" src="https://github.com/user-attachments/assets/9262e561-585f-48fa-b730-6076a47535b3" />
+
+     Figure X: There was no sanitization of the file name during the profile photo upload process, which posed a risk for malicious file uploads.
+
+     ***After enhancement***,
+
+     <img width="1249" height="463" alt="Screenshot 2025-12-28 235454" src="https://github.com/user-attachments/assets/5edf4161-3a31-46d6-81d8-3345a54ad1e1" />
+
+     Figure X: The filename is sanitized using preg_replace() to ensure that only safe characters are allowed. The photo is stored securely in a non-public directory (profile_photos).
+
+     **Enhancement:** The filename is sanitized to only allow safe characters (alphanumeric characters, hyphens, and periods), preventing directory traversal and malicious file uploads.
+
+     **Security Fix:** The file is now stored in a secure, non-public directory, reducing the risk of unauthorized file access.
+
+     ### 3. **Room Availability and Booking Creation**
+
+     ***Before enhancement***,
+
+     <img width="930" height="663" alt="Screenshot 2025-12-29 000118" src="https://github.com/user-attachments/assets/c723fe49-ad8b-4124-8818-25ecd976a274" />
+
+     Figure X: There was no check for room availability before proceeding with the booking creation, which could lead to overbooking the same room.
+
+     ***After enhancement***,
+
+     <img width="767" height="818" alt="Screenshot 2025-12-28 235953" src="https://github.com/user-attachments/assets/2dbf9b30-cca6-4ca9-84b3-b65aaf5910e6" />
+
+     Figure X: A room availability check is added before proceeding with the booking creation to ensure the room is available.
+
+     **Enhancement:** The room availability check (->where('availability', '>', 0)) ensures that rooms are only booked if they are available.
+
+     **Security Fix:** This prevents overbooking and ensures that rooms are not double-booked, ensuring data integrity.
+
+     ### 4. **Environment Variables for Sensitive Data**
+
+     ***Code and Implementation:***,
+
+     Sensitive data like database credentials and API keys should be stored in the .env file to prevent hardcoding in the source code.
+     
+     <img width="213" height="154" alt="Screenshot 2025-12-29 000227" src="https://github.com/user-attachments/assets/c5a60d0d-3c55-4ea4-b636-9856bf03ea2b" />
+
+     **Security Fix:** Storing sensitive data in environment variables ensures that sensitive information is never exposed in the code repository, reducing the risk of accidental leaks.
+
+          ### 5. **Authorization and Access Control**
+
+     ***Before enhancement***,
+
+     <img width="399" height="142" alt="Screenshot 2025-12-29 000603" src="https://github.com/user-attachments/assets/cbc316ae-2b21-4612-8bdd-e9c3112d9ac4" />
+
+     Figure X: Authorization was either absent or handled in a minimal way. For example, the user might not have been explicitly authorized to create or update bookings.
+
+     ***After enhancement***,
+
+     <img width="503" height="145" alt="Screenshot 2025-12-29 000641" src="https://github.com/user-attachments/assets/0a56f464-0ec7-490d-813a-ffb3c2027793" />
+
+     Figure X: Ensures that users are properly authorized to perform sensitive actions like creating or updating bookings by using Laravel's built-in Authorization Gate or Policy.
+
+     **Enhancement:** The $this->authorize('create', Booking::class) check ensures that the current user is authorized to create a booking based on the policy defined for Booking.
+
+     **Security Fix:** This enhances security by ensuring only authorized users (e.g., admins or specific roles) can perform certain actions, preventing unauthorized users from accessing sensitive features.
+
+     ### 6. **Input Validation and Sanitization**
+
+     ***Before enhancement***,
+
+     <img width="754" height="580" alt="Screenshot 2025-12-29 001708" src="https://github.com/user-attachments/assets/58166881-dca1-4ead-9122-1b8264ad76c7" />
+
+     Figure X: Input validation may have been missing or only performed in a limited scope, making the system vulnerable to SQL Injection, XSS, or malicious input.
+
+     ***After enhancement***,
+
+     <img width="889" height="598" alt="Screenshot 2025-12-29 001732" src="https://github.com/user-attachments/assets/7841ea80-d7b0-4427-82fa-72d8807ea62c" />
+
+     Figure X: Input validation is done using Laravel’s validate() method, ensuring that only valid and sanitized data gets processed.
+
+     **Enhancement:** The $request->validate() method ensures that all incoming data is validated against rules before being processed.
+
+     **Security Fix:** This prevents SQL injection, XSS attacks, and ensures that only valid data is passed to the database, making the system more secure and reliable.
+
+     ### 7. **Middleware Protection for Admin Routes**
+
+     ***Before enhancement***,
+
+     <img width="676" height="56" alt="Screenshot 2025-12-29 002317" src="https://github.com/user-attachments/assets/b45c4d80-98a1-4cb3-bc8a-24a801de0c2e" />
+
+     Figure X: There may not have been middleware protection for sensitive admin routes, meaning that any user could potentially access admin resources without being properly authenticated or authorized.
+
+     ***After enhancement***,
+
+     <img width="1083" height="417" alt="Screenshot 2025-12-29 002135" src="https://github.com/user-attachments/assets/3994e3c6-dfdc-4dfe-b161-e7ffb2860db7" />
+
+     Figure X: Middleware is used to protect admin routes. Only users with the isAdmin role can access these routes.
+
+     **Enhancement:** The isAdmin middleware ensures that only users with the admin role can access specific routes.
+
+     **Security Fix:** This prevents unauthorized access to the admin dashboard, protecting sensitive features and data from unauthorized users.
+
+     ### 8. **Session Management for Sensitive Data**
+
+     ***Before enhancement***,
+
+     <img width="598" height="688" alt="Screenshot 2025-12-29 003849" src="https://github.com/user-attachments/assets/9b26c48b-d033-4055-9fdd-d538793e6a9b" />
+
+     Figure X: Sensitive information might have been exposed to the client side or stored in URL parameters, making it vulnerable to attacks like session hijacking.
+
+     ***After enhancement***,
+
+     <img width="953" height="865" alt="Screenshot 2025-12-29 004117" src="https://github.com/user-attachments/assets/18cc58ca-e9dc-476c-88b9-7fd16909e5a6" />
+
+     Figure X: Session management is used to store sensitive booking data securely on the server-side.
+
+     **Enhancement:** Sensitive data, such as booking details, is now stored in sessions, which are managed securely on the server-side.
+
+     **Security Fix:** This prevents sensitive data from being exposed on the client-side (in URLs or cookies), reducing the risk of session hijacking or data leakage.
+
+     ### 9. **Secure File Storage**
+
+     ***Before enhancement***,
+
+     <img width="843" height="429" alt="Screenshot 2025-12-29 004334" src="https://github.com/user-attachments/assets/9346dc4d-f554-4780-a3cf-815e914fc973" />
+
+     Figure X: Files (like profile photos) were potentially stored in a public directory, making them directly accessible by anyone via the URL.
+
+     ***After enhancement***,
+
+     <img width="1265" height="272" alt="Screenshot 2025-12-29 004301" src="https://github.com/user-attachments/assets/d6c39596-8c21-4d9f-9a6d-1bdf1a74e504" />
+
+     Figure X: Files are securely stored in Laravel’s storage system, outside of the publicly accessible directory.
+
+     **Enhancement:** The files are now stored in Laravel’s storage system, using the storeAs() method to save files outside the public directory, preventing unauthorized access via the web.
+
+     **Security Fix:** Storing files outside the public directory ensures that only authorized users can access the files, reducing the risk of direct file exposure.
+     
+
+
 ## References
 1. Bukit Bintang Accommodation | JW Marriott Hotel Kuala Lumpur. (n.d.). Marriott Bonvoy. https://www.marriott.com/en-us/hotels/kuldt-jw-marriott-hotel-kuala-lumpur/rooms/
 2. The Regency Hotel – Kuala Lumpur. (n.d.). https://theregencyhotel.my/kualalumpur/
