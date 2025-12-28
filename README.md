@@ -399,6 +399,72 @@ The objectives of enhancments are:
 
    **Fix Achieved:** CSRF impact is minimized even if request passes token check.
 
+    ### 3. Payment Controller Enhancement
+
+   ### a) Centralized & Strict Input Validation
+
+   #### Before Enhancement: 
+
+   <img width="900" alt="image" src="gambar/codebeforepaymentserver.png" />
+
+   Figure X: Raw request was used while also having weak validation rules. Additionally, it also allowed uncontrolled characters in card name increasing the risk of stored XSS.
+
+   #### After Enhancement:
+   
+   <img width="900" alt="image" src="gambar/codeafterpaymentserver.png" />
+
+   Figure X: Prevents JavaScript injection through form fields by rejecting HTML tags, scripts, and special characters. This results in the code blocking stored and reflected XSS payloads.
+
+   **Fix Achieved:** Malicious scripts cannot enter or persist in the system.
+
+   ### b) Removal of Sensitive Client-Supplied Data
+
+   #### Before Enhancement: 
+
+   <img width="900" alt="image" src="gambar/Sensitiveinfobefore.png" />
+
+   <img width="900" alt="image" src="gambar/Paymentcalcbefore.png" />
+
+   Figure X: Sensitive client information such as card number is accepted directly from the client making it easy to tamper with the ammount of payment if CSRF attacks happens
+
+   <img width="900" alt="image" src="gambar/Paymentcalcbefore2.png" />
+
+   Figure X: Additionally, the payment calculations was done in the payment blade, makking it easy to modify the transaction value.
+
+   #### After Enhancement: 
+
+   <img width="900" alt="image" src="gambar/Sensitiveinfoaafter.png" />
+
+   <img width="900" alt="image" src="gambar/Paymentcalcafter.png" />
+
+   Figure X: Sensitive client information is not received directly and payment amount is calculated server-side making CSRF attacks cannot modify transaction value.
+
+   **Fix Achieved:** Prevents forged payment submissions
+
+   ### C) Ownership Validation for Payment Processing
+
+   #### Before Enhancement:
+
+   <img width="900" alt="image" src="gambar/Bookingfindbefore.png" />
+
+   Figure X: Any authenticated user could attempt payment on another user’s booking. CSRF exploit could target other users’ bookings
+
+   #### After Enhancement: 
+
+   <img width="900" alt="image" src="gambar/Bookingfindafter.png" />
+
+   Figure X: Enforces booking ownership. CSRF requests fail if user does not own booking which prevents cross-account payment execution
+
+   **Fix Achieved:** Unauthorized forged requests are blocked.
+
+   ### D) Replay / Double-Payment Prevention
+
+   <img width="900" alt="image" src="gambar/Paymentcheck.png" />
+
+   Figure X: Added codes to prevent double-payment. The code prevents repeated state-changing requests, stopping replay attacks triggered via CSRF
+
+   **Fix Achieved:** Ensures idempotent payment processing.
+
    ## Database Security Principles
 
    - ***Secure Error Handling***
